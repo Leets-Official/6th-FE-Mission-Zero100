@@ -1,48 +1,41 @@
-import Text from "./components/Text";
-import Button from "./components/Button";
-import Checkbox from "./components/Checkbox";
-import Input from "./components/Input";
+
+
+import TaskInput from "./components/TaskInput";
+import TaskItem from "./components/TaskItem";
+import FilterButtons from "./components/FilterButtons";
 import "./App.css";
 
+
+
 function App() {
+  const tasks = [
+    { id: "list1", label: "Eat", checked: false },
+    { id: "list2", label: "Sleep", checked: false },
+    { id: "list3", label: "Repeat", checked: false },
+  ];
+
   return (
     <>
-      <Text tag="h1">TodoMatic</Text>
-      <Text tag="h2">what needs to be done?</Text>
-      <div>
-        <Input/> <Button>Add</Button>
-      </div>
+      <h1>TodoMatic</h1>
+      <h2>What needs to be done?</h2>
 
-      <div>
-        <Button>Show all tasks</Button>
-        <Button>Show active tasks</Button>
-        <Button>Show completed tasks</Button>
-      </div>
-      
-      <Text tag="h2">3 tasks remaining</Text>
+      <TaskInput />
+      <FilterButtons />
+
+      <h2>3 tasks remaining</h2>
       <ul>
-        <li>
-          <Checkbox id="list1" label="Eat"/>
-          <div>
-            <Button>Edit Eat</Button> <Button>Delete Eat</Button>
-          </div>
-        </li>
-        <li>
-          <Checkbox id="list2" label="Sleep"/>
-          <div>
-            <Button>Edit Sleep</Button> <Button>Delete Sleep</Button>
-          </div>
-        </li>
-        <li>
-          <Checkbox id="list3" label="Repeat"/>
-          <div>
-            <Button>Edit Repeat</Button> <Button>Delete Repeat</Button>
-          </div>
-        </li>
+        {tasks.map((task) => (
+          <TaskItem
+            key={task.id}
+            id={task.id}
+            label={task.label}
+            checked={task.checked}
+          />
+        ))}
       </ul>
     </>
-    
-  )
+  );
 }
 
 export default App;
+
