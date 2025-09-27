@@ -4,6 +4,7 @@ import Text from './components/text';
 import Button from './components/button';
 import Checkbox from './components/checkBox';
 import Input from './components/input';
+import CategoryButton from './components/categoryButton'; 
 
 import './App.css'; 
 
@@ -22,11 +23,20 @@ function App() {
         </div>
 
        
-        <div>  {/*두 번째로 나타난 div*/}
+        {/* 
+        <div>  
           <Button>Show all tasks</Button>
           <Button>Show active tasks</Button>
           <Button>Show completed tasks</Button>
         </div>
+        
+        */}
+        <div>
+          <CategoryButton>All</CategoryButton>
+          <CategoryButton>Active</CategoryButton>
+          <CategoryButton>Completed</CategoryButton>
+        </div>
+
 
      
         <h2>3 tasks remaining</h2>
