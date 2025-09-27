@@ -38,7 +38,6 @@ function App() {
         </div>
 
 
-     
         <h2>3 tasks remaining</h2>
         
         
