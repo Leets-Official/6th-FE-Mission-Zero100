@@ -4,6 +4,12 @@ import Checkbox from "./components/Checkbox";
 import Input from "./components/Input";
 
 export default function App() {
+  const tasks = [
+    { id: "list1", label: "Eat", checked: false },
+    { id: "list2", label: "Sleep", checked: false },
+    { id: "list3", label: "Repeat", checked: false },
+  ];
+
   return (
     <div>
       <Text as="h1">TodoMatic</Text>
@@ -20,30 +26,22 @@ export default function App() {
         <Button>Show completed tasks</Button>
       </div>
 
-      <Text as="h2">3 tasks remaining</Text>
+      <Text as="h2">{tasks.length} tasks remaining</Text>
 
       <ul>
-        <li>
-          <Checkbox label="Eat" />
-          <div>
-            <Button>Edit Eat</Button>
-            <Button>Delete Eat</Button>
-          </div>
-        </li>
-        <li>
-          <Checkbox label="Sleep" />
-          <div>
-            <Button>Edit Sleep</Button>
-            <Button>Delete Sleep</Button>
-          </div>
-        </li>
-        <li>
-          <Checkbox label="Repeat" />
-          <div>
-            <Button>Edit Repeat</Button>
-            <Button>Delete Repeat</Button>
-          </div>
-        </li>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <Checkbox
+              id={task.id}
+              label={task.label}
+              checked={task.checked}
+            />
+            <div>
+              <Button>Edit {task.label}</Button>
+              <Button>Delete {task.label}</Button>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
