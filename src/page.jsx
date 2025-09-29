@@ -4,7 +4,7 @@ import Input from './components/Input';
 import TodoItem from './components/TodoItem';
 import Checkbox from './components/Checkbox';
 
-// UI-only: 상태/이벤트 없이 더미 데이터로 렌더
+// gpt 도움으로 만드는 중
 const TASKS = ['Eat', 'Sleep', 'Repeat'];
 
 export default function Home() {
