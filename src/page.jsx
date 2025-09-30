@@ -1,41 +1,44 @@
-import Text from './components/Text';
-import Button from './components/Button';
-import Input from './components/Input';
-import TodoItem from './components/TodoItem';
-import Checkbox from './components/Checkbox';
+import { useState } from 'react'
+import Header from './components/Header'
+import AddTodo from './components/AddTodo'
+import CategoryFilter from './components/CategoryFilter'
+import TodoList from './components/TodoList'
 
-// gpt 도움으로 만드는 중
-const TASKS = ['Eat', 'Sleep', 'Repeat'];
+// 초기 데이터 & ID 시퀀스
+let nextId = 4
+const initial = [
+  { id: 1, title: 'Eat', completed: false },
+  { id: 2, title: 'Sleep', completed: true },
+  { id: 3, title: 'Repeat', completed: false },
+]
 
 export default function Home() {
+  const [todos, setTodos] = useState(initial)
+  const [filter, setFilter] = useState('All') // All | Active | Completed
+
+  // 추가/토글/삭제
+  const add = (title) =>
+    setTodos(prev => [{ id: nextId++, title, completed: false }, ...prev])
+
+  const toggle = (id) =>
+    setTodos(prev => prev.map(t => (t.id === id ? { ...t, completed: !t.completed } : t)))
+
+  const del = (id) =>
+    setTodos(prev => prev.filter(t => t.id !== id))
+
+  // 필터 적용
+  const filtered = todos.filter(t =>
+    filter === 'Active' ? !t.completed
+      : filter === 'Completed' ? t.completed
+      : true
+  )
+
   return (
-    <div style={{ maxWidth: 720, margin: '40px auto', padding: 16 }}>
-      <h1 style={{ fontSize: 48, fontWeight: 800, marginBottom: 24 }}>TodoMatic</h1>
-
-      <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 12 }}>
-        What needs to be done?
-      </h2>
-
-      <div style={{ display: 'flex', gap: 8, marginBottom: 12 }}>
-        <Input placeholder="" />
-        <Button>Add</Button>
-      </div>
-
-      <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
-        <Button>Show all tasks</Button>
-        <Button>Show active tasks</Button>
-        <Button>Show completed tasks</Button>
-      </div>
-
-      <Text as="h3" style={{ fontSize: 24, fontWeight: 700, marginBottom: 12 }}>
-        {TASKS.length} tasks remaining
-      </Text>
-
-      <ul style={{ listStyle: 'disc', paddingLeft: 20 }}>
-        {TASKS.map((label) => (
-          <TodoItem key={label} label={label} />
-        ))}
-      </ul>
-    </div>
-  );
+    <main className="max-w-screen-sm md:max-w-2xl lg:max-w-4xl mx-auto px-4 py-6">
+      <Header />
+      <AddTodo onAdd={add} />
+      <CategoryFilter value={filter} onChange={setFilter} />
+      <TodoList todos={filtered} onToggle={toggle} onDelete={del} />
+    </main>
+  )
 }
