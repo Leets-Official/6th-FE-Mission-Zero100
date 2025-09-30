@@ -1,11 +1,9 @@
 
 
-import TaskInput from "./components/TaskInput";
-import TaskItem from "./components/TaskItem";
-import FilterButtons from "./components/FilterButtons";
+import AddTodo from "./components/AddTodo";
+import Todo from "./components/Todo";
+import Category from "./components/Category";
 import "./App.css";
-
-
 
 function App() {
   const tasks = [
@@ -19,13 +17,13 @@ function App() {
       <h1>TodoMatic</h1>
       <h2>What needs to be done?</h2>
 
-      <TaskInput />
-      <FilterButtons />
+      <AddTodo />
+      <Category />
 
       <h2>3 tasks remaining</h2>
       <ul>
         {tasks.map((task) => (
-          <TaskItem
+          <Todo
             key={task.id}
             id={task.id}
             label={task.label}
