@@ -1,15 +1,16 @@
-import React from 'react';
+import React from 'react'
 
 const Checkbox = ({ label, name }) => {
   return (
-    <label>{'•'} {/* css파일에 disc를 설정했는데 작동이 안 돼서 그냥 여기 작성함 ㅠ */}
-      <input type="checkbox" name={name} />
+    <label>
+      {'•'} {/* css파일에 disc를 설정했는데 작동이 안 돼서 그냥 여기 작성함 ㅠ */}
+      <input type='checkbox' name={name} />
       {label}
     </label>
-  );
-};
+  )
+}
 
-export default Checkbox;
+export default Checkbox
 
 /*
 name : 문자열 타입. 폼과 제출 되는 입력의 이름을 지정

@@ -1,3 +1,5 @@
+
+
 /* outer-container: 전체 화면을 채우고 자식(inner-container)을 중앙에 배치 */
 .outerContainer {
   display: flex; /* 자식 요소들은 자신이 가진 컨텐츠의 크기만큼만 넓이를 가지게 됨*/
@@ -7,20 +9,21 @@
   width: 100vw; /* 브라우저창 너비의 100%가 되도록함 */
 }
 
-.innerContainer > div:nth-of-type(1) {  /* >: 부모-자식 관계, .innerContainer의 바로 아래에 있는 div를 선택하란 의미.*/
+.innerContainer > div:nth-of-type(1) {
+  /* >: 부모-자식 관계, .innerContainer의 바로 아래에 있는 div를 선택하란 의미.*/
   display: flex;
   gap: 10px; /* 요소들 간의 간격 */
   margin-bottom: 20px;
 }
 
-
-.innerContainer > div:nth-of-type(2) { /* innerContainer 안에 있는 바로 두 번째 div */
+.innerContainer > div:nth-of-type(2) {
+  /* innerContainer 안에 있는 바로 두 번째 div */
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
 }
 
-.innerContainer ul li{
+.innerContainer ul li {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -31,7 +34,7 @@
 }
 
 ul {
-  padding-left: 0; 
+  padding-left: 0;
   list-style: disc;
   margin: 0;
 }
@@ -44,7 +47,6 @@ li {
   align-items: center; /* 세로 중앙 정렬 ->이래야 블록들이 좀 가지런함 없으면 좀 단차가 생김 */
 }
 
-
 button {
   padding: 8px 15px;
   border: 1px solid #ccc;
@@ -52,18 +54,8 @@ button {
   background-color: #fff; /* 배경색 하얗게 */
 }
 
-h1, h2, h3 {
-  text-align: left;
-  font-style: italic;
-  color: #000;
-}
 
- 
-.buttonGroup{
+.buttonGroup {
   display: flex;
   gap: 10px;
 }
-
-
-
-
