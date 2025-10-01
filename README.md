@@ -1,8 +1,20 @@
-# 6th-FE-Mission-Zero100
+제목 양식 : [2주차] 배윤선/[feat] TodoList 스타일링 + 컴포넌트 모듈화
 
-6기 FE Zero100 미션을 위한 레포지토리입니다.
+---
+
+## 1. 무엇을?
+2주차 Zero100 과제인 Todo List 스타일 주기 + 컴포넌트 모듈화를 진행함
 
 
-### 🎯 미션 요구사항
-1. 미션 진행 방법을 꼭 읽고 진행해주세요
-   [미션 진행 방법](https://www.notion.so/46dbd9440a4f4d5e97228011dff70f5a?pvs=21)
+
+<br>
+
+## 2. 상세 설명
+
+1. tailwindcss, eslint, prettier, react-router-dom 설치
+2. Header, AddTodo, Category, TodoList, Todo 컴포넌트 모듈화
+3. tailwindcss를 이용한 동적 스타일링 적용
+
+<br>
+
+## 3. 추가 사항
