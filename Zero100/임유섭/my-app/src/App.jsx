@@ -33,7 +33,7 @@ function CategoryTabs({ value, onChange }) {
   ];
 
   return (
-    <div className="mb-4 flex gap-2">
+    <div className="mb-4 flex justify-center gap-2">
       {tabs.map((t) => (
         <Button
           key={t.key}
@@ -53,16 +53,18 @@ function CategoryTabs({ value, onChange }) {
 
 function TodoItem({ text, done }) {
   return (
-    <div className="flex items-center justify-between rounded border border-gray-200 bg-white p-3">
-      <div className="flex items-center gap-3">
+    <div className="rounded border border-gray-200 bg-white p-3">
+      {/* 체크박스 & 텍스트 */}
+      <div className="flex items-center gap-3 mb-2">
         <Checkbox defaultChecked={done} />
         <Text className={done ? 'line-through text-gray-400' : ''}>{text}</Text>
       </div>
+      {/* 버튼 */}
       <div className="flex gap-2">
-        <Button className="rounded border border-gray-300 bg-gray-200 text-gray-700 hover:bg-gray-300">
+        <Button className="flex-1 rounded border border-gray-300 bg-gray-200 text-gray-700 hover:bg-gray-300">
           Edit
         </Button>
-        <Button className="rounded bg-red-600 text-white hover:bg-red-500">
+        <Button className="flex-1 rounded bg-red-600 text-white hover:bg-red-500">
           Delete
         </Button>
       </div>
@@ -79,13 +81,15 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen">
-      <main className="container mx-auto max-w-xl md:max-w-2xl px-4 py-8 rounded bg-white shadow-[0_15px_40px_rgba(0,0,0,0.12)]">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <main className="w-[360px] bg-white border border-gray-300 shadow-sm p-5">
         <Header />
         <AddTodo />
         <CategoryTabs value={filter} onChange={setFilter} />
 
-        <p className="mb-3 text-lg font-semibold text-gray-700">3 tasks remaining</p>
+        <p className="mb-3 text-lg font-semibold text-gray-700">
+          {todos.length} tasks remaining
+        </p>
 
         <div className="space-y-4">
           {todos.map((t) => (
