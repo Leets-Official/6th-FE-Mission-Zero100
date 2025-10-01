@@ -1,15 +1,13 @@
 import React from 'react';
+import Checkbox from '../components/checkBox';
 
 function Todo({ task, onToggle, onDelete }) {
   return (
     <li className="mb-4">
-
       <div className="flex items-center mb-2">
-        <input
-          type="checkbox"
-          className="h-5 w-5 rounded-none border-gray-400 text-slate-800 focus:ring-slate-700"
+        <Checkbox 
           checked={task.completed}
-          onChange={() => onToggle(task.id)}  />
+          onChange={()=>onToggle}/>
         <span className={`ml-4 font-medium ${task.completed ? 'line-through text-gray-400' : 'text-slate-800'}`}>
           {task.text}
         </span>

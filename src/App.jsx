@@ -6,7 +6,7 @@ import TodoList from './modules/todoList';
 
 
 const initialTasks = [
-  { id: 1, text: 'Eat', completed: true },
+  { id: 1, text: 'Eat', completed: false },
   { id: 2, text: 'Sleep', completed: false },
   { id: 3, text: 'Repeat', completed: false },
 ];

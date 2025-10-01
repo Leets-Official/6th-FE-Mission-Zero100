@@ -1,10 +1,14 @@
 import React from 'react'
 
-const Checkbox = ({ label, name }) => {
+const Checkbox = ({ label, name, checked, onChange }) => {
   return (
     <label>
-      {'•'} {/* css파일에 disc를 설정했는데 작동이 안 돼서 그냥 여기 작성함 ㅠ */}
-      <input type='checkbox' name={name} />
+      <input 
+      type='checkbox' 
+      name={name}
+      checked = {checked}
+      onChange={onChange} 
+      className="h-5 w-5 rounded-none border-gray-400 text-slate-800 focus:ring-slate-700"/>
       {label}
     </label>
   )
