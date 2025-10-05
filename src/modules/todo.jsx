@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Checkbox from '../components/checkBox';
 
 function Todo({ task, onToggle, onDelete }) {

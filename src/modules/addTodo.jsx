@@ -1,4 +1,3 @@
-import React from 'react';
 import Text from '../components/Text';
 import Input from '../components/Input';
 import Button from '../components/button';

@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Text from '../components/Text'; // Text 컴포넌트 사용
 
 function Header() {
