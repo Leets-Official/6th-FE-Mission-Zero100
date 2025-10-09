@@ -1,9 +1,12 @@
+import Text from '../common/Text';
 import Todo from './Todo';
 
 export default function TodoList({ count, tasks, onToggle, onDelete }) {
   return (
     <section>
-      <h2 className='text-2xl font-semibold text-gray-700 mb-6'>{count} tasks remaining</h2>
+      <Text as='h2' className='text-2xl font-semibold text-gray-700 mb-6'>
+        {count} tasks remaining
+      </Text>
       <ul className='space-y-6'>
         {tasks.map((t) => (
           <Todo

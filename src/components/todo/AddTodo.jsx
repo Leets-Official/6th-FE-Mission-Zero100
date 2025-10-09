@@ -1,25 +1,31 @@
 import { useState } from 'react';
+import Input from '../common/Input';
+import Button from '../common/Button';
 
 export default function AddTodo({ onAdd }) {
   const [value, setValue] = useState('');
 
   const handleAdd = () => {
-    onAdd(value);
+    const v = value.trim();
+    if (!v) return;
+    onAdd(v);
     setValue('');
   };
 
   return (
-    <div className='mb-8'>
-      <input
-        type='text'
-        placeholder='Enter a task'
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        className='w-full border-2 border-gray-400 p-3'
-      />
-      <button onClick={handleAdd} className='w-full bg-black text-white rounded-none py-3 mt-3'>
+    <div>
+      <div className='mb-2'>
+        <Input
+          aria-label='New task'
+          placeholder='Enter a task'
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </div>
+
+      <Button variant='primary' className='w-full' onClick={handleAdd}>
         Add
-      </button>
+      </Button>
     </div>
   );
 }

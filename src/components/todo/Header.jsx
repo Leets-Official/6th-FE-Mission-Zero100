@@ -1,8 +1,14 @@
-export default function Header({ count }) {
+import Text from '../common/Text';
+
+export default function Header() {
   return (
     <header className='text-center mb-6'>
-      <h1 className='text-4xl font-extrabold mb-4'>TodoMatic</h1>
-      <h2 className='text-xl text-gray-600'>What needs to be done?</h2>
+      <Text as='h1' className='text-4xl font-extrabold mb-4'>
+        TodoMatic
+      </Text>
+      <Text as='h2' className='text-xl text-gray-600'>
+        What needs to be done?
+      </Text>
     </header>
   );
 }
