@@ -13,7 +13,7 @@ export default function AddTodo({ onAdd }) {
   };
 
   return (
-    <div>
+    <div className='mb-8'>
       <div className='mb-2'>
         <Input
           aria-label='New task'
@@ -23,9 +23,7 @@ export default function AddTodo({ onAdd }) {
         />
       </div>
 
-      <Button variant='primary' className='w-full' onClick={handleAdd}>
-        Add
-      </Button>
+      <Button variant='primary'>Add</Button>
     </div>
   );
 }

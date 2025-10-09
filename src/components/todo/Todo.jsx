@@ -14,7 +14,7 @@ export default function Todo({ id, label, checked, onToggle, onDelete }) {
         />
       </div>
 
-      <div className='flex gap-3'>
+      <div className='flex gap-4'>
         <Button variant='outline' className='flex-1'>
           Edit
         </Button>
