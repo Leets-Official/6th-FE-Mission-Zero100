@@ -36,6 +36,19 @@ function App() {
     ));
   };
 
+  const filteredTasks = tasks.filter(task =>{
+    if(selectedCategory === 'active'){
+      return !task.completed;
+    }
+    if(selectedCategory === 'completed'){
+      return task.completed;
+    }
+    return true; //all이면 그냥 할일 다 보여줌
+  })
+
+
+
+
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center font-sans">
       <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
@@ -45,7 +58,7 @@ function App() {
           selected={selectedCategory} 
           onCategoryChange={setSelectedCategory} />
         <TodoList 
-          tasks={tasks} 
+          tasks={filteredTasks} 
           onToggle={toggleTask} 
           onDelete={deleteTask} />
       </div>
