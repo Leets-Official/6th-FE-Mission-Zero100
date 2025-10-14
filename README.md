@@ -1,17 +1,19 @@
-제목 양식 : [1주차] 배윤선/[feat] TodoList UI 구현하기
+제목 양식 : [2주차] 배윤선/[feat] TodoList 스타일링 + 컴포넌트 모듈화
 
-------------------------------------------------------------------
+---
 
 ## 1. 무엇을?
+2주차 Zero100 과제인 Todo List 스타일 주기 + 컴포넌트 모듈화를 진행함
 
-src > components > button.jsx, checkBox.jsx, input.jsx, text.jsx 파일을 생성해 각 컴포넌트를 작성한 후 src > App.jsx에 불러와 컴포넌트들을 배치했습니다. 제시된 사진과의 유사도를 올리기 위해 src > App.css파일에서 디자인 작업도 함께 진행했습니다. 
+
 
 <br>
 
 ## 2. 상세 설명
-1. button, checkBox, input, text 컴포넌트 구현
-2. App.css, App.jsx에서 불러와 UI 배치
-*기능/스타일 제외 
+
+1. tailwindcss, eslint, prettier, react-router-dom 설치
+2. Header, AddTodo, Category, TodoList, Todo 컴포넌트 모듈화
+3. tailwindcss를 이용한 동적 스타일링 적용
 
 <br>
 

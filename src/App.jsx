@@ -1,44 +1,53 @@
-import React from 'react'; 
+import { useState } from 'react';
+import Header from './modules/header';
+import AddTodo from './modules/addTodo';
+import Category from './modules/category';
+import TodoList from './modules/todoList'; 
 
-import Text from './components/text';
-import Button from './components/button';
-import Checkbox from './components/checkBox';
-import Input from './components/input';
-import CategoryButton from './components/categoryButton'; 
-import TodoItem from './components/todoItem';
 
-import './App.css'; 
+const initialTasks = [
+  { id: 1, text: 'Eat', completed: false },
+  { id: 2, text: 'Sleep', completed: false },
+  { id: 3, text: 'Repeat', completed: false },
+];
 
 function App() {
-  const tasks = ["Eat", "Sleep", "Repeat"]
+  const [tasks, setTasks] = useState(initialTasks);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  
+
+  const addTask = (taskText) => {
+    const newTask = {
+      id: Date.now(), 
+      text: taskText,
+      completed: false,
+    };
+    setTasks([...tasks, newTask]);
+  };
+
+
+  const deleteTask = (taskId) => {
+    setTasks(tasks.filter(task => task.id !== taskId));
+  };
+
+  const toggleTask = (taskId) => {
+    setTasks(tasks.map(task => 
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    ));
+  };
 
   return (
-    <div className="outerContainer"> {/*UI들을 덩어리처럼 한 블록으로 만들어서 화면 중앙에 위치시키고 싶었음*/}
-      <div className="innerContainer"> {/* UI 내용을 담는 블록 (좌측 정렬) */}
-     
-        <h1>TodoMatic</h1>
-        <h2>What needs to be done?</h2>
-
-        <div> 
-          <Input />
-          <Button>Add</Button>
-        </div>
-
-        <div>
-          <CategoryButton>All</CategoryButton>
-          <CategoryButton>Active</CategoryButton>
-          <CategoryButton>Completed</CategoryButton>
-        </div>
-
-
-        <h2>{tasks.length} tasks remaining</h2>
-        
-        
-        <ul>
-         {tasks.map((taskName) =>(
-          <TodoItem key={taskName} taskName={taskName}/>
-         ))}
-        </ul>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center font-sans">
+      <div className="w-full max-w-lg bg-white shadow-lg rounded-lg p-8">
+        <Header />
+        <AddTodo onAddTask={addTask} />
+        <Category 
+          selected={selectedCategory} 
+          onCategoryChange={setSelectedCategory} />
+        <TodoList 
+          tasks={tasks} 
+          onToggle={toggleTask} 
+          onDelete={deleteTask} />
       </div>
     </div>
   );
