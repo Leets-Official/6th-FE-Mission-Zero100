@@ -7,7 +7,7 @@ function Todo({ task, onToggle, onDelete }) {
       <div className="flex items-center mb-2">
         <Checkbox 
           checked={task.completed}
-          onChange={()=>onToggle}/>
+          onChange={()=>onToggle(task.id)}/>
         <span className={`ml-4 font-medium ${task.completed ? 'line-through text-gray-400' : 'text-slate-800'}`}>
           {task.text}
         </span>
