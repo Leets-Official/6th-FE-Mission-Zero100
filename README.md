@@ -3,7 +3,7 @@
 ---
 
 ## 1. 무엇을?
-2주차 Zero100 과제인 Todo List 스타일 주기 + 컴포넌트 모듈화를 진행함
+3주차 Zero100 과제인 Todo List 주요기능 추가하기를 진행함
 
 
 
@@ -11,10 +11,7 @@
 
 ## 2. 상세 설명
 
-1. tailwindcss, eslint, prettier, react-router-dom 설치
-2. Header, AddTodo, Category, TodoList, Todo 컴포넌트 모듈화
-3. tailwindcss를 이용한 동적 스타일링 적용
-
+1. 작업추가하기 : useState를 이용해 사용자로부터 값을 입력받고 todoList에 추가함
 <br>
 
 ## 3. 추가 사항
