@@ -1,48 +1,49 @@
-import Text from "./components/Text";
-import Button from "./components/Button";
-import Checkbox from "./components/Checkbox";
-import Input from "./components/Input";
+import { useState } from 'react';
+import Header from './components/todo/Header';
+import AddTodo from './components/todo/AddTodo';
+import Category from './components/todo/Category';
+import TodoList from './components/todo/TodoList';
 
 export default function App() {
-  const tasks = [
-    { id: "list1", label: "Eat", checked: false },
-    { id: "list2", label: "Sleep", checked: false },
-    { id: "list3", label: "Repeat", checked: false },
-  ];
+  const [tasks, setTasks] = useState([
+    { id: 'list1', label: 'Eat', checked: false },
+    { id: 'list2', label: 'Sleep', checked: false },
+    { id: 'list3', label: 'Repeat', checked: false },
+  ]);
+  const [filter, setFilter] = useState('all');
+
+  const addTask = (label) => {
+    if (!label.trim()) return;
+    setTasks((prev) => [...prev, { id: Date.now().toString(), label, checked: false }]);
+  };
+
+  const toggleTask = (id) => {
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, checked: !t.checked } : t)));
+  };
+
+  const deleteTask = (id) => {
+    setTasks((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const filteredTasks = tasks.filter((t) => {
+    if (filter === 'active') return !t.checked;
+    if (filter === 'completed') return t.checked;
+    return true;
+  });
 
   return (
-    <div>
-      <Text as="h1">TodoMatic</Text>
-      <Text as="h2">What needs to be done?</Text>
-
-      <div>
-        <Input placeholder="Enter a task" />
-        <Button>Add</Button>
+    <div className='min-h-screen bg-gray-100 flex justify-center py-14'>
+      <div className='w-[600px] bg-white rounded-sm p-10 shadow-[var(--shadow-card)]'>
+        <Header count={filteredTasks.length} />
+        <AddTodo onAdd={addTask} />
+        <Category filter={filter} setFilter={setFilter} />
+        <TodoList
+          count={filteredTasks.length}
+          tasks={filteredTasks}
+          onToggle={toggleTask}
+          onDelete={deleteTask}
+        />
       </div>
-
-      <div>
-        <Button>Show all tasks</Button>
-        <Button>Show active tasks</Button>
-        <Button>Show completed tasks</Button>
-      </div>
-
-      <Text as="h2">{tasks.length} tasks remaining</Text>
-
-      <ul>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <Checkbox
-              id={task.id}
-              label={task.label}
-              checked={task.checked}
-            />
-            <div>
-              <Button>Edit {task.label}</Button>
-              <Button>Delete {task.label}</Button>
-            </div>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
