@@ -1,4 +1,3 @@
-// src/components/todo/Category.jsx
 import Button from '../common/Button';
 
 export default function Category({ filter, setFilter }) {

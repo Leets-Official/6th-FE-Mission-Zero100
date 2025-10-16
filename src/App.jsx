@@ -33,7 +33,7 @@ export default function App() {
 
   return (
     <div className='min-h-screen bg-gray-100 flex justify-center py-14'>
-      <div className='w-[600px] bg-white rounded-sm p-10 shadow-[0_0_0_1px_rgba(0,0,0,0.06),0_12px_40px_rgba(0,0,0,0.08)]'>
+      <div className='w-[600px] bg-white rounded-sm p-10 shadow-[var(--shadow-card)]'>
         <Header count={filteredTasks.length} />
         <AddTodo onAdd={addTask} />
         <Category filter={filter} setFilter={setFilter} />
