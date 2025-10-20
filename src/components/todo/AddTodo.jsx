@@ -23,7 +23,9 @@ export default function AddTodo({ onAdd }) {
         />
       </div>
 
-      <Button variant='primary'>Add</Button>
+      <Button variant='primary' onClick={handleAdd}>
+        Add
+      </Button>
     </div>
   );
 }
