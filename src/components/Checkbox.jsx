@@ -4,7 +4,7 @@ export default function Checkbox({ id, defaultChecked }) {
             id={id}
             type="checkbox"
             defaultChecked={defaultChecked}
-            className="h-4 w-4 border-gray-400 text-black focus:ring-black"
+            className='w-8 h-8 border-2 border-gray-400 accent-gray-800'
         />
     );
 }
