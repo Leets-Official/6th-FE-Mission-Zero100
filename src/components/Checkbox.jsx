@@ -1,10 +1,11 @@
-export default function Checkbox({ id, defaultChecked }) {
+export default function Checkbox({ id, checked, onChange }) {
     return (
         <input
             id={id}
             type="checkbox"
-            defaultChecked={defaultChecked}
-            className='w-8 h-8 border-2 border-gray-400 accent-gray-800'
+            checked={checked}
+            onChange={onChange}
+            className="w-6 h-6 border-2 border-gray-400 accent-gray-800"
         />
     );
 }
