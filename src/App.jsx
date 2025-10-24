@@ -1,10 +1,10 @@
-import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import AddTodo from "./components/AddTodo";
 import Category from "./components/Category";
 import TodoList from "./components/TodoList";
+import "./App.css";
 
-function Home() {
+export default function App() {
     const tasks = ["Eat", "Sleep", "Repeat"];
 
     return (
@@ -14,13 +14,5 @@ function Home() {
             <Category />
             <TodoList tasks={tasks} />
         </div>
-    );
-}
-
-export default function App() {
-    return (
-        <Routes>
-            <Route path="/" element={<Home />} />
-        </Routes>
     );
 }
