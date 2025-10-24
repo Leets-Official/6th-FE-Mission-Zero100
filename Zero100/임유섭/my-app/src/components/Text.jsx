@@ -1,3 +1,7 @@
-export default function Text({ children }) {
-  return <p>{children}</p>;
+export default function Text({ children, className = '', ...props }) {
+  return (
+    <span className={className} {...props}>
+      {children}
+    </span>
+  );
 }
