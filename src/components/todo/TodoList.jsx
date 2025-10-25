@@ -1,7 +1,7 @@
 import Text from '../common/Text';
 import Todo from './Todo';
 
-export default function TodoList({ count, tasks, onToggle, onDelete }) {
+export default function TodoList({ count, tasks, onToggle, onDelete, onEdit }) {
   return (
     <section className='w-full'>
       <Text as='h2' className='text-2xl font-semibold text-gray-700 mb-6'>
@@ -16,6 +16,7 @@ export default function TodoList({ count, tasks, onToggle, onDelete }) {
             checked={t.checked}
             onToggle={onToggle}
             onDelete={onDelete}
+            onEdit={onEdit}
           />
         ))}
       </ul>

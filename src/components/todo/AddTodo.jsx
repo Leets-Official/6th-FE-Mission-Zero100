@@ -12,6 +12,10 @@ export default function AddTodo({ onAdd }) {
     setValue('');
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') handleAdd();
+  };
+
   return (
     <div className='mb-8'>
       <div className='mb-2'>
@@ -20,10 +24,13 @@ export default function AddTodo({ onAdd }) {
           placeholder='Enter a task'
           value={value}
           onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
       </div>
 
-      <Button variant='primary'>Add</Button>
+      <Button variant='primary' onClick={handleAdd}>
+        Add
+      </Button>
     </div>
   );
 }
