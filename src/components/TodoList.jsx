@@ -1,7 +1,6 @@
 import Text from "./Text";
 import Todo from "./Todo";
 
-
 export default function TodoList({ tasks, setTasks, filter }) {
     //  필터링 (All / Active / Completed)
     const filteredTasks = tasks.filter((t) => {
@@ -24,8 +23,18 @@ export default function TodoList({ tasks, setTasks, filter }) {
         );
     };
 
+    //  이름 수정 기능 (Edit → Save)
+    const handleEdit = (index, newLabel) => {
+        setTasks((prev) =>
+            prev.map((task, i) =>
+                i === index ? { ...task, label: newLabel } : task
+            )
+        );
+    };
+
     return (
         <section className="mt-6">
+            {/* 남은 할 일 개수 표시 */}
             <Text as="h3" className="text-xl sm:text-2xl font-semibold">
                 {filteredTasks.length} tasks remaining
             </Text>
@@ -37,8 +46,9 @@ export default function TodoList({ tasks, setTasks, filter }) {
                         id={`task-${idx}`}
                         label={task.label}
                         completed={task.completed}   //  completed 전달
-                        onDelete={() => handleDelete(idx)}// 삭제 버튼 동작
-                        onToggle={() => handleToggle(idx)} //체크박스 토글 동작
+                        onDelete={() => handleDelete(idx)} // 삭제 버튼 동작
+                        onToggle={() => handleToggle(idx)} // 체크박스 토글 동작
+                        onEdit={(newLabel) => handleEdit(idx, newLabel)} //  수정 기능 동작
                     />
                 ))}
             </ul>
