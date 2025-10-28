@@ -3,19 +3,33 @@ import Header from './modules/header';
 import AddTodo from './modules/addTodo';
 import Category from './modules/category';
 import TodoList from './modules/todoList'; 
+import { useEffect } from 'react';
 
 
-const initialTasks = [
-  { id: 1, text: 'Eat', completed: false },
-  { id: 2, text: 'Sleep', completed: false },
-  { id: 3, text: 'Repeat', completed: false },
-];
+// const initialTasks = [
+//   { id: 1, text: 'Eat', completed: false },
+//   { id: 2, text: 'Sleep', completed: false },
+//   { id: 3, text: 'Repeat', completed: false },
+// ];
 
 function App() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState(()=>{
+    const storedTasks = localStorage.getItem('tasks');
+    if(storedTasks){
+      return JSON.parse(storedTasks);
+    }
+    return[];
+  }
+  );
   const [selectedCategory, setSelectedCategory] = useState(null);
-  
 
+  useEffect(()=>{
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  
+  
+  
   const addTask = (taskText) => {
     const newTask = {
       id: Date.now(), 
