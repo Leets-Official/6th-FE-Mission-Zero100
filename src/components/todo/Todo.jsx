@@ -18,11 +18,14 @@ export default function Todo({ id, label, checked, onToggle, onDelete, onEdit })
     <li className='pb-6'>
       <div className='mb-4'>
         {isEditing ? (
-          <Input
-            value={editValue}
-            onChange={(e) => setEditValue(e.target.value)}
-            className='border-gray-400'
-          />
+          <div>
+            <p className='mb-2 text-sm text-gray-600'>New name for {label}</p>
+            <Input
+              value={editValue}
+              onChange={(e) => setEditValue(e.target.value)}
+              className='border-gray-400'
+            />
+          </div>
         ) : (
           <Checkbox
             id={`todo-${id}`}
