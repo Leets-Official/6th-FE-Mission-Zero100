@@ -7,13 +7,7 @@ import TodoList from './components/todo/TodoList';
 export default function App() {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('tasks');
-    return saved
-      ? JSON.parse(saved)
-      : [
-          { id: 'list1', label: 'Eat', checked: false },
-          { id: 'list2', label: 'Sleep', checked: false },
-          { id: 'list3', label: 'Repeat', checked: false },
-        ];
+    return saved ? JSON.parse(saved) : [];
   });
 
   const [filter, setFilter] = useState('all');
