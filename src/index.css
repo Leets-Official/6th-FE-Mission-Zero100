@@ -1,0 +1,27 @@
+@import "tailwindcss";
+
+/* Basic page background and card to match design */
+html, body, #root {
+	height: 100%;
+}
+body {
+	background: #f3f4f6; /* light gray */
+	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.app-card {
+	background: #ffffff;
+	border-radius: 8px;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+	padding: 32px;
+}
+
+.thick-input {
+	border: 2px solid #111;
+}
+
+.filter-button {
+	min-width: 100px;
+}
