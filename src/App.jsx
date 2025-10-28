@@ -36,6 +36,13 @@ function App() {
     ));
   };
 
+  const editTask = (taskId, newName) => {
+    setTasks(tasks.map(task=>
+      task.id === taskId ? {...task, text: newName} : task
+    ));
+  };
+
+
   const filteredTasks = tasks.filter(task =>{
     if(selectedCategory === 'active'){
       return !task.completed;
@@ -60,7 +67,9 @@ function App() {
         <TodoList 
           tasks={filteredTasks} 
           onToggle={toggleTask} 
-          onDelete={deleteTask} />
+          onDelete={deleteTask} 
+          onEdit={editTask}
+          />
       </div>
     </div>
   );

@@ -1,7 +1,7 @@
 
 import Todo from './todo';
 
-function TodoList({ tasks, onToggle, onDelete }) {
+function TodoList({ tasks, onToggle, onDelete, onEdit }) {
   const remainingTasks = tasks.filter(task => !task.completed).length;
 
   return (
@@ -16,6 +16,7 @@ function TodoList({ tasks, onToggle, onDelete }) {
             task={task} 
             onToggle={onToggle} 
             onDelete={onDelete} 
+            onEdit={onEdit}
           />
         ))}
       </ul>
