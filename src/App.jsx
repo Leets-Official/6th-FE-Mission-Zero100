@@ -2,15 +2,9 @@ import { useState } from 'react';
 import Header from './modules/header';
 import AddTodo from './modules/addTodo';
 import Category from './modules/category';
-import TodoList from './modules/todoList'; 
+import TodoList from './modules/TodoList'; 
 import { useEffect } from 'react';
 
-
-// const initialTasks = [
-//   { id: 1, text: 'Eat', completed: false },
-//   { id: 2, text: 'Sleep', completed: false },
-//   { id: 3, text: 'Repeat', completed: false },
-// ];
 
 function App() {
   const [tasks, setTasks] = useState(()=>{
