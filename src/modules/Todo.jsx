@@ -11,7 +11,7 @@ function Todo({ task, onToggle, onDelete, onEdit }) {
     setIsEditing(false);
   }
   function handleCancel(){
-    setIsEditing(fasle);
+    setIsEditing(false);
     setNewName(task.text);
   }
 
