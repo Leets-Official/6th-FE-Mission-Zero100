@@ -4,7 +4,7 @@ import AddTodo from '../components/todo/AddTodo';
 import Category from '../components/todo/Category';
 import TodoList from '../components/todo/TodoList';
 
-export default function TodoContaier() {
+export default function TodoContainer() {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem('tasks');
     return saved ? JSON.parse(saved) : [];
