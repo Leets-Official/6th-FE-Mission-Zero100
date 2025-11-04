@@ -1,1 +1,43 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Noto Sans KR,sans-serif;color:#111;background:#fff}
+
+/* layout */
+.container{max-width:720px;margin:48px auto;padding:0 20px}
+
+/* header */
+.header{display:flex;justify-content:center;margin-bottom:28px}
+.header h1{font-size:28px;font-weight:800;letter-spacing:.4px}
+
+/* card / form */
+.card{width:100%;max-width:520px;margin:0 auto;background:#f7f7f7;border:1px solid #eee;border-radius:10px;padding:24px}
+.title{text-align:center;margin:0 0 18px}
+.form{display:flex;flex-direction:column;gap:10px}
+.label{font-size:14px;color:#444}
+.input{height:36px;padding:0 12px;border:1px solid #d6d6d6;border-radius:8px;background:#fff}
+.row{display:flex;align-items:center;gap:10px}
+.flex1{flex:1}
+
+/* buttons & links */
+.btn{height:40px;padding:0 18px;border:none;border-radius:999px;background:#d9d9d9;cursor:pointer;font-weight:700}
+.btn.small{height:36px;padding:0 14px}
+.btn:hover{filter:brightness(.96)}
+.link-btn{display:inline-flex;align-items:center;justify-content:center;height:36px;padding:0 14px;border-radius:999px;border:1px solid #d6d6d6;text-decoration:none;color:#111;background:#fff}
+.link-btn:hover{background:#fafafa}
+
+/* home */
+.home-buttons{display:flex;flex-direction:column;gap:14px;align-items:center;margin-top:12px}
+
+/* todo */
+.todo-list{margin:14px 0 0;padding-left:18px}
+.todo-item{display:flex;align-items:center;gap:8px;margin:6px 0}
+.todo-item label{flex:1}
+.todo-item input[type="text"]{height:32px;border-radius:6px;border:1px solid #ddd;padding:0 8px}
+.icon-btn{height:30px;padding:0 10px;border-radius:8px;border:1px solid #ddd;background:#fff;cursor:pointer}
+.icon-btn:hover{background:#fafafa}
+.filter-wrap{display:flex;gap:8px;margin-top:10px}
+.filter-btn{padding:0 10px;height:30px;border-radius:999px;border:1px solid #d6d6d6;background:#fff;cursor:pointer}
+.filter-btn.active{background:#111;color:#fff;border-color:#111}
