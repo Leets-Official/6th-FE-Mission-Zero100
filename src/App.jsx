@@ -1,7 +1,14 @@
 // src/App.jsx
-import Page from './page'; // 방금 바꾼 파일
+import React from 'react'
+import { Outlet } from 'react-router-dom'
 
+// App now acts as the layout component for router children.
+// It must render an <Outlet/> so child routes (/, /login, /signup, /todo) appear.
 export default function App() {
-  return <Page />;
+  return (
+    <div>
+      <Outlet />
+    </div>
+  )
 }
 
