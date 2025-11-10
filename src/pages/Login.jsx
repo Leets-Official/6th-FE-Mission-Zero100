@@ -13,74 +13,42 @@ export default function Login() {
   }
 
   return (
-    <div style={{display:'flex',flexDirection:'column',alignItems:'center',minHeight:'100vh',background:'#f5f5f5',padding:'40px 20px'}}>
-      <div style={{width:'100%',maxWidth:400}}>
-  {/* Title */}
-  <h1 style={{fontSize:24,fontWeight:500,marginBottom:32,color:'#111',textAlign:'center'}}>로그인</h1>
-        
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10 px-5">
+      <div className="w-full max-w-md">
+        {/* Title */}
+        <h1 className="text-2xl font-medium mb-8 text-gray-900 text-center">로그인</h1>
+
         {/* Login Form */}
-        <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:8}}>
-            <div style={{ display: 'flex', flexDirection: 'row', position: 'relative', alignItems: 'stretch' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', position: 'relative', marginRight: 10 }}>
-                    <div style={{display:'flex',gap:8,alignItems:'center'}}>
-                        <div style={{flex:1, display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}>
-                            <p style={{ width: "100px", textAlign: "end" }}>아이디</p>
-                            <input 
-                                placeholder="아이디"
-                                value={id} 
-                                onChange={e=>setId(e.target.value)} 
-                                style={{
-                                width:'100%',
-                                padding:'12px 16px',
-                                fontSize:14,
-                                border:'1px solid #ddd',
-                                borderRadius:4,
-                                outline:'none'
-                                }} 
-                            />
-                        </div>
-                    </div>
-                    <div style={{ marginTop: 10, display: "flex", flexDirection: "row", gap: 10, alignItems: "center" }}>
-                        <p style={{ width: "100px", textAlign: "end" }}>비밀번호</p>
-                        <input 
-                        type="password"
-                        placeholder="비밀번호" 
-                        value={password} 
-                        onChange={e=>setPassword(e.target.value)} 
-                        style={{
-                            width:'100%',
-                            padding:'12px 16px',
-                            fontSize:14,
-                            border:'1px solid #ddd',
-                            borderRadius:4,
-                            outline:'none'
-                        }} 
-                        />
-                    </div>
-                </div>
-        <button
-          type="submit"
-          style={{
-            width: '120px',
-            alignSelf: 'stretch',
-            background: '#4B5563',
-            color: 'white',
-            border: 'none',
-            borderRadius: 4,
-            cursor: 'pointer',
-            fontSize: 20,
-            fontWeight: 500,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            padding: 0
-          }}
-        >
-          로그인
-        </button>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+          <div className="flex gap-2 items-start">
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <p className="w-24 text-right">아이디</p>
+                <input
+                  placeholder="아이디"
+                  value={id}
+                  onChange={e => setId(e.target.value)}
+                  className="flex-1 border border-gray-300 rounded-md px-4 py-3 text-sm outline-none"
+                />
+              </div>
+              <div className="mt-2 flex items-center gap-2">
+                <p className="w-24 text-right">비밀번호</p>
+                <input
+                  type="password"
+                  placeholder="비밀번호"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="flex-1 border border-gray-300 rounded-md px-4 py-3 text-sm outline-none"
+                />
+              </div>
             </div>
-          
+            <button
+              type="submit"
+              className="w-28 h-12 bg-slate-700 text-white rounded-md text-lg font-medium flex items-center justify-center"
+            >
+              로그인
+            </button>
+          </div>
         </form>
       </div>
     </div>

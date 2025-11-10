@@ -14,28 +14,28 @@ export default function Signup() {
   }
 
   return (
-    <div style={{display:'flex',flexDirection:'column',alignItems:'center',minHeight:'100vh',background:'#f5f5f5',padding:'40px 20px'}}>
-      <div style={{width:'100%',maxWidth:420}}>
-        <h1 style={{fontSize:28,fontWeight:700,textAlign:'center',marginBottom:28}}>회원가입</h1>
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 py-10 px-5">
+      <div className="w-full max-w-[420px]">
+        <h1 className="text-3xl font-extrabold text-center mb-7">회원가입</h1>
 
-        <form onSubmit={handleSubmit} style={{display:'flex',flexDirection:'column',gap:16}}>
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <label style={{width:72,fontSize:16}}>이름</label>
-            <input value={name} onChange={e=>setName(e.target.value)} style={{flex:1,padding:'10px 12px',borderRadius:6,border:'1px solid #ccc'}} />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <label className="w-18 text-base">이름</label>
+            <input value={name} onChange={e => setName(e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-gray-300" />
           </div>
 
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <label style={{width:72,fontSize:16}}>아이디</label>
-            <input value={id} onChange={e=>setId(e.target.value)} style={{flex:1,padding:'10px 12px',borderRadius:6,border:'1px solid #ccc'}} />
+          <div className="flex items-center gap-3">
+            <label className="w-18 text-base">아이디</label>
+            <input value={id} onChange={e => setId(e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-gray-300" />
           </div>
 
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <label style={{width:72,fontSize:16}}>비밀번호</label>
-            <input type="password" value={password} onChange={e=>setPassword(e.target.value)} style={{flex:1,padding:'10px 12px',borderRadius:6,border:'1px solid #ccc'}} />
+          <div className="flex items-center gap-3">
+            <label className="w-18 text-base">비밀번호</label>
+            <input type="password" value={password} onChange={e => setPassword(e.target.value)} className="flex-1 px-3 py-2 rounded-lg border border-gray-300" />
           </div>
 
-          <div style={{display:'flex',justifyContent:'center',marginTop:6}}>
-            <button type="submit" style={{padding:'12px 20px',background:'#4B5563',color:'#fff',border:'none',borderRadius:8,boxShadow:'0 2px 0 rgba(0,0,0,0.3)',fontSize:16}}>회원가입</button>
+          <div className="flex justify-center mt-2">
+            <button type="submit" className="px-5 py-3 bg-slate-700 text-white rounded-lg shadow-md text-base">회원가입</button>
           </div>
         </form>
       </div>
