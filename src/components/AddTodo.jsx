@@ -1,9 +1,10 @@
 import { useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
-import Text from "./Text";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import Text from "@/components/Text";
+
 //  AddTodo Component
-// 새로운 할 일을 입력받아 상위 컴포넌트의 tasks 상태를 업데이트
+//  새로운 할 일을 입력받아 상위 컴포넌트의 tasks 상태를 업데이트
 export default function AddTodo({ setTasks }) {
     const [input, setInput] = useState("");
 
@@ -27,7 +28,8 @@ export default function AddTodo({ setTasks }) {
                     aria-label="New task"
                     placeholder="Enter a task"
                     value={input}
-                    onChange={(e) => setInput(e.target.value)} //// 입력값 변경 시 state 업데이트
+                    onChange={(e) => setInput(e.target.value)} // 입력값 변경 시 state 업데이트
+                    onKeyDown={(e) => e.key === "Enter" && handleAdd()} //피드백 Enter로도 추가 가능
                 />
             </div>
 

@@ -1,7 +1,7 @@
-import { useState } from "react";
-import Checkbox from "./Checkbox";
-import Button from "./Button";
-import Input from "./Input";
+import { useState, useEffect } from "react";
+import Checkbox from "@/components/Checkbox";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
 
 //  Todo 컴포넌트
 //  한 개의 할 일을 표시하고, 완료/삭제/수정 기능을 담당
@@ -9,8 +9,13 @@ export default function Todo({ id, label, completed, onDelete, onToggle, onEdit 
     //  수정 모드 상태 (Edit 클릭 시 true)
     const [isEditing, setIsEditing] = useState(false);
 
-    // 수정 중인 이름을 저장하는 상태
+    //  수정 중인 이름 상태
     const [newName, setNewName] = useState(label);
+
+    //  label이 바뀔 때마다 newName을 최신화
+    useEffect(() => {
+        setNewName(label);
+    }, [label]);
 
     //  Save 버튼 클릭 시 — 이름 변경 후 수정 모드 종료
     const handleSave = () => {
@@ -30,7 +35,7 @@ export default function Todo({ id, label, completed, onDelete, onToggle, onEdit 
             {isEditing ? (
                 //  수정 모드 화면
                 <div>
-                    {/*  New name  입력창 */}
+                    {/*  New name 입력창 */}
                     <Input
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}

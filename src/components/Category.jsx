@@ -1,4 +1,5 @@
-import Button from "./Button";
+import Button from "@/components/Button";
+
 
 export default function Category({ filter, setFilter }) {
     // 필터 버튼 목록

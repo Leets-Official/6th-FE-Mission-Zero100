@@ -1,4 +1,4 @@
-import Text from "./Text";
+import Text from "@/components/Text";
 
 export default function Header() {
     return (
@@ -9,3 +9,4 @@ export default function Header() {
         </header>
     );
 }
+

@@ -1,5 +1,5 @@
-import Header from "./components/Header";
-import TodoContainer from "./containers/TodoContainer";
+import Header from "@/components/Header";
+import TodoContainer from "@/containers/TodoContainer";
 
 export default function App() {
     return (
