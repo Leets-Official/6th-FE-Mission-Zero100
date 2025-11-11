@@ -7,13 +7,12 @@ export default function Header() {
     <header className="border-b p-4 flex items-center justify-between">
       <Link to="/" className="font-bold">MyApp</Link>
       <nav className="space-x-3">
-        {!isAuthed && (
+        {!isAuthed ? (
           <>
             <Link to="/login">로그인</Link>
             <Link to="/register">회원가입</Link>
           </>
-        )}
-        {isAuthed && (
+        ) : (
           <>
             <span>{auth.user.name}님</span>
             <button onClick={logout} className="underline">로그아웃</button>
