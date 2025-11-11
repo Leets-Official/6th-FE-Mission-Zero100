@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Text from '../components/common/Text';
+import { signup } from '../lib/auth';
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -10,13 +11,19 @@ export default function Signup() {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
     if (!name || !id || !pw) {
       alert('모든 항목을 입력하세요.');
       return;
     }
-    alert('회원가입 완료!');
-    navigate('/login');
+
+    try {
+      await signup({ username: id, password: pw, name });
+      alert('회원가입이 완료되었습니다!');
+      navigate('/login');
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
