@@ -1,5 +1,5 @@
 
-import Todo from './todo';
+import Todo from './Todo';
 
 function TodoList({ tasks, onToggle, onDelete, onEdit }) {
   const remainingTasks = tasks.filter(task => !task.completed).length;
