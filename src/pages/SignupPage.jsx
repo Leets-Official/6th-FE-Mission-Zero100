@@ -49,7 +49,7 @@ function SignupPage(){
                             onChange={(e)=>setId(e.target.value)}/>
                     </div>
                     <div>
-                        <label htmlFor="pwd" className="block mb-1 test-sm font-medium text-gray-700">
+                        <label htmlFor="pwd" className="block mb-1text-sm font-medium text-gray-700">
                             비밀번호
                         </label>
                         <Input 
@@ -58,7 +58,7 @@ function SignupPage(){
                             type="password"
                             placeholder="비밀번호 입력하세요"
                             value={pwd}
-                            onChange={(e)=>setPwd(e.target.vlaue)}/>
+                            onChange={(e)=>setPwd(e.target.value)}/>
                     </div>
                     <div>
                         <Button type="submit">
