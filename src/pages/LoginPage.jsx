@@ -2,6 +2,7 @@ import { useState } from "react";
 import {useNavigate} from 'react-router-dom';
 import Button from "../components/button";
 import Input from "../components/Input";
+import { loginUser } from "../api/auth";
 
 function LoginPage(){
     const [id, setId] = useState('');
@@ -9,8 +10,32 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
-    const handleLogin = (e) => { //인풋이벤트 발생 시 페이지가 reload되는 걸 막기 위해 사용
+    const handleLogin = async (e) => { //인풋이벤트 발생 시 페이지가 reload되는 걸 막기 위해 사용
         e.preventDefault();
+
+        try{
+            const response = await loginUser({username: id, password:[pwd]});
+            if(response.data.length === 1){
+                const user = response.data[0];
+
+                const userToStore = {
+                    id: user.id,
+                    username: user.username,
+                    name: user.name
+                };
+                localStorage.setItem('loggedInUser', JSON.stringify(userToStore));
+
+                alert(`${user.name}님, 환영합니다`);
+                navigate('/todo');
+            } else {
+                alert("아이디 또는 비밀번호가 일치하지 않습니다");
+            }
+        } catch(error){
+            console.error("로그인 중 오류 발생 : ", error);
+            alert("로그인 중 오류가 발생했습니다.");
+        }
+
+
         console.log('로그인시도');
     };
 

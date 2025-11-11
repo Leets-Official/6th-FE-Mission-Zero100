@@ -1,60 +1,106 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import Header from '../modules/Header';
 import AddTodo from '../modules/AddTodo';
 import Category from '../modules/Category';
-import TodoList from '../modules/TodoList'; 
+import TodoList from '../modules/TodoList';
+
+import { 
+  getTodosByUserId, 
+  createTodo, 
+  deleteTodo, 
+  updateTodo 
+} from '../api/auth';
 
 function TodoPage() {
-  const navigate = useNavigate(); 
-
-
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    if (!loggedInUser) {
-      alert('로그인이 필요합니다.');
-      navigate('/login'); 
-    }
-  }, [navigate]); 
-
-  const [tasks, setTasks] = useState(() => {
-    const storedTasks = localStorage.getItem('tasks'); 
-    if (storedTasks) {
-      return JSON.parse(storedTasks);
-    }
-    return [];
-  });
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null); 
+  const [tasks, setTasks] = useState([]); 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
+    const storedUser = localStorage.getItem('loggedInUser');
+    if (!storedUser) {
+      alert('로그인이 필요합니다.');
+      navigate('/login');
+    } else {
+      setUser(JSON.parse(storedUser));
+    }
+  }, [navigate]);
 
-  const addTask = (taskText) => {
+  
+  useEffect(() => {
+    if (user) { 
+      const fetchTasks = async () => { 
+        try {
+          const response = await getTodosByUserId(user.id); 
+          setTasks(response.data);
+        } catch (error) {
+          console.error("Todo 목록 로딩 실패:", error);
+        }
+      };
+      fetchTasks();
+    }
+  }, [user]); 
+
+  
+  const addTask = async (taskText) => {
+    if (!user) return; 
+
     const newTask = {
-      id: Date.now(),
       text: taskText,
       completed: false,
+      userId: user.id 
     };
-    setTasks([...tasks, newTask]);
+    
+    try {
+      const response = await createTodo(newTask);
+      setTasks([...tasks, response.data]); 
+    } catch (error) {
+      console.error("Todo 추가 실패:", error);
+    }
   };
 
-  const deleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
+
+  const deleteTask = async (taskId) => {
+    try {
+      await deleteTodo(taskId);
+      setTasks(tasks.filter(task => task.id !== taskId)); 
+    } catch (error) {
+      console.error("Todo 삭제 실패:", error);
+    }
   };
 
-  const toggleTask = (taskId) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    ));
+
+  const toggleTask = async (taskId) => {
+    const taskToToggle = tasks.find(task => task.id === taskId);
+    if (!taskToToggle) return;
+
+    try {
+     
+      await updateTodo(taskId, { completed: !taskToToggle.completed }); 
+      
+      setTasks(tasks.map(task =>
+        task.id === taskId ? { ...task, completed: !task.completed } : task
+      ));
+    } catch (error) {
+      console.error("Todo 토글 실패:", error);
+    }
   };
 
-  const editTask = (taskId, newName) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, text: newName } : task
-    ));
+
+  const editTask = async (taskId, newName) => {
+    try {
+      await updateTodo(taskId, { text: newName });
+      setTasks(tasks.map(task =>
+        task.id === taskId ? { ...task, text: newName } : task
+      ));
+    } catch (error) {
+      console.error("Todo 수정 실패:", error);
+    }
   };
 
+  
   const filteredTasks = tasks.filter(task => {
     if (selectedCategory === 'active') {
       return !task.completed;
@@ -62,7 +108,7 @@ function TodoPage() {
     if (selectedCategory === 'completed') {
       return task.completed;
     }
-    return true; //all이면 그냥 할일 다 보여줌
+    return true; 
   });
 
   return (

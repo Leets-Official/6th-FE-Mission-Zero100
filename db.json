@@ -1,0 +1,11 @@
+{
+  "users": [
+    {
+      "id": "08ce",
+      "username": "gildong@gmail.com",
+      "password": "12345",
+      "name": "홍길동"
+    }
+  ],
+  "todos": []
+}
