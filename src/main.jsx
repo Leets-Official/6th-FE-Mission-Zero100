@@ -4,8 +4,24 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 
-// 페이지 예시 (원하면 파일로 분리해도 OK)
-function Home() { return <h1 className="text-2xl font-bold">Home</h1> }
+// simple inline example components were here before; replace by importing pages
+// Use the existing Todo app (export default) located at src/page.jsx
+import TodoApp from './page.jsx'
+import Login from './pages/Login.jsx'
+import Signup from './pages/Signup.jsx'
+
+function Home() {
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+      <div className="flex flex-col gap-3 w-full max-w-[300px] mx-auto">
+        <h1 className="text-4xl font-extrabold text-center mb-5">Suseong TODO</h1>
+        <a href="/login" className="block px-4 py-4 bg-slate-700 text-white rounded-full text-center text-base font-medium w-full max-w-[200px] mx-auto">로그인</a>
+        <a href="/signup" className="block px-4 py-4 bg-slate-700 text-white rounded-full text-center text-base font-medium w-full max-w-[200px] mx-auto">회원가입</a>
+      </div>
+    </div>
+  )
+}
+
 function About() { return <h1 className="text-2xl">About</h1> }
 
 const router = createBrowserRouter([
@@ -14,7 +30,10 @@ const router = createBrowserRouter([
     element: <App />,            // 공통 레이아웃
     children: [
       { index: true, element: <Home /> },   // /
-      { path: 'about', element: <About /> } // /about
+      { path: 'about', element: <About /> }, // /about
+  { path: 'todo', element: <TodoApp /> }, // /todo (use existing Todo app)
+      { path: 'login', element: <Login /> }, // /login
+      { path: 'signup', element: <Signup /> }, // /signup
     ],
   },
 ])
