@@ -1,6 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
 import RootPage from "@/pages/RootPage";
-import TodoContainer from "@/containers/TodoContainer";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import TodoPage from "@/pages/TodoPage.jsx";
