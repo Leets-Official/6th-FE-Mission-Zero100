@@ -3,18 +3,26 @@ import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Text from '../components/common/Text';
 import { useState } from 'react';
+import { login } from '../lib/auth';
 
 export default function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!id || !pw) {
       alert('아이디와 비밀번호를 입력하세요.');
       return;
     }
-    navigate('/todo');
+
+    try {
+      const user = await login({ username: id, password: pw });
+      alert(`${user.name}님 환영합니다!`);
+      navigate('/todo');
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
