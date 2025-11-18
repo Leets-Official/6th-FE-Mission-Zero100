@@ -5,6 +5,12 @@
       "name": "김철수",
       "username": "chulsu",
       "password": "1234"
+    },
+    {
+      "id": "995c",
+      "username": "example",
+      "password": "1234",
+      "name": "예시"
     }
   ]
 }
