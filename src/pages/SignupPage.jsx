@@ -2,6 +2,7 @@ import {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
 import Input from "../components/Input";
+import { checkUserExists, createUser } from "../api/auth";
 
 function SignupPage(){
     const [name, setName] = useState('');
@@ -10,9 +11,26 @@ function SignupPage(){
     
     const navigate = useNavigate();
 
-    const handleSignupPage = (e) =>{
+    const handleSignupPage = async (e) =>{
         e.preventDefault();
+
         console.log('회원가입시도');
+
+        try{
+            const checkRes = await checkUserExists(id);
+
+            if (checkRes.data.length > 0){
+                alert("이미 사용 중인 아이디입니다.");
+                return;
+            }
+            await createUser({username: id, password:pwd, name: name});
+
+            alert("회원가입에 성공했습니다! 로그인 페이지로 이동합니다.");
+            navigate('/login');
+        } catch(error){
+            console.error('회원가입 중 오류 발생:', error);
+            alert("회원가입 중 오류가 발생했습니다");
+        }
     };
 
     const navToLogin = ()=>{
