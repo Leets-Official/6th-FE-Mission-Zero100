@@ -14,7 +14,7 @@ function LoginPage(){
         e.preventDefault();
 
         try{
-            const response = await loginUser({username: id, password:[pwd]});
+            const response = await loginUser({username: id, password:pwd});
             if(response.data.length === 1){
                 const user = response.data[0];
 
