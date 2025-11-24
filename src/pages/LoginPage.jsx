@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Button from "../components/button";
 import Input from "../components/Input";
 import { loginUser } from "../api/auth";
+import axios from "axios";
 
 function LoginPage(){
     const [id, setId] = useState('');
@@ -10,6 +11,9 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
+    const handleKakaoLogin = () => {
+    window.location.href = 'https://blog.leets.land/auth/kakao';
+};
     const handleLogin = async (e) => { //인풋이벤트 발생 시 페이지가 reload되는 걸 막기 위해 사용
         e.preventDefault();
 
@@ -79,6 +83,24 @@ function LoginPage(){
                         </Button>
                     </div>
                 </form>
+                <div className="relative flex py-2 items-center">
+                    <div className="flex-grow border-t border-gray-300"></div>
+                    <span className="flex-shrink mx-4 text-gray-400 text-sm">또는</span>
+                    <div className="flex-grow border-t border-gray-300"></div>
+                </div>
+                <div>
+                    <button
+                        type="button"
+                        onClick={handleKakaoLogin}
+                        className="w-full py-2 px-4 bg-[#FEE500] text-black font-bold rounded-md hover:bg-[#FDD835] transition duration-200 flex justify-center items-center"
+                    >
+                    
+                        <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                           <path d="M12 3C6.48 3 2 6.48 2 10.77C2 13.54 3.85 16 6.64 17.47L5.64 21.12C5.55 21.46 5.95 21.75 6.25 21.55L10.72 18.57C11.14 18.61 11.57 18.63 12 18.63C17.52 18.63 22 15.15 22 10.86C22 6.57 17.52 3 12 3Z"/>
+                        </svg>
+                        카카오로 3초 만에 시작하기
+                    </button>
+                </div>
                 <div className="text-center">
                     <button
                         onClick={navToSignUp}
