@@ -65,6 +65,33 @@ export default function Signup() {
           <div className="flex justify-center mt-2">
             <button type="submit" className="px-5 py-3 bg-slate-700 text-white rounded-lg shadow-md text-base">회원가입</button>
           </div>
+
+          {/* Kakao OAuth 버튼 */}
+          <div className="flex justify-center mt-4">
+            <button
+              type="button"
+              aria-label="카카오로 가입 또는 로그인"
+              onClick={() => {
+                const BASE_URL = import.meta.env.VITE_BASE_URL || (api && api.defaults && api.defaults.baseURL) || ''
+                window.location.href = `${BASE_URL}/auth/kakao`
+              }}
+              className="w-full max-w-[320px] bg-[#FEE500] text-black font-semibold py-3 rounded-full flex items-center justify-center shadow-md"
+            >
+              <span className="flex items-center">
+                <svg
+                  aria-hidden="true"
+                  focusable="false"
+                  className="w-5 h-5 mr-3"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <rect width="24" height="24" rx="4" fill="#FEE500" />
+                  <path d="M6 8.5C6 6 8 4 10.5 4h3c2.5 0 4.5 2 4.5 4.5V12c0 2.5-2 4.5-4.5 4.5h-3L6 20V8.5z" fill="#3C1E1E" opacity="0.95" />
+                </svg>
+                <span>카카오로 로그인</span>
+              </span>
+            </button>
+          </div>
         </form>
       </div>
     </div>
