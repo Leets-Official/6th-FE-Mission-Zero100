@@ -1,15 +1,24 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Text from '../components/common/Text';
-import { signup } from '../lib/auth';
+import { registerOauth, signup } from '../lib/auth';
 
 export default function Signup() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [name, setName] = useState('');
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const oauthCode = useMemo(() => location.state?.code, [location.state]);
+  const [title, setTitle] = useState('회원가입');
+
+  useEffect(() => {
+    if (oauthCode) {
+      setTitle('카카오 연동 회원가입');
+    }
+  }, [oauthCode]);
 
   const handleSignup = async () => {
     if (!name || !id || !pw) {
@@ -18,11 +27,21 @@ export default function Signup() {
     }
 
     try {
-      await signup({ username: id, password: pw, name });
-      alert('회원가입이 완료되었습니다!');
-      navigate('/login');
+      if (oauthCode) {
+        await registerOauth({ code: oauthCode, username: id, password: pw, name });
+        alert('카카오 연동 회원가입이 완료되었습니다!');
+      } else {
+        await signup({ username: id, password: pw, name });
+        alert('회원가입이 완료되었습니다!');
+      }
+      navigate('/todo');
     } catch (err) {
-      alert(err.message);
+      const serverMessage =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        err.message ||
+        '오류가 발생했습니다.';
+      alert(serverMessage);
     }
   };
 
@@ -30,8 +49,13 @@ export default function Signup() {
     <div className='min-h-screen flex flex-col items-center justify-center bg-gray-50'>
       <div className='bg-white p-10 rounded-lg shadow-md w-[420px]'>
         <Text as='h2' className='text-2xl font-bold mb-8 text-center'>
-          회원가입
+          {title}
         </Text>
+        {oauthCode ? (
+          <p className='text-sm text-gray-600 mb-4 text-center'>
+            카카오 인증을 완료했어요. 서비스에서 사용할 아이디/비밀번호를 등록해 주세요.
+          </p>
+        ) : null}
 
         <div className='flex flex-col gap-4 mb-6'>
           <div className='flex items-center justify-between gap-3'>
