@@ -31,8 +31,9 @@ export default function LoginPage() {
                 return;
             }
 
-            document.cookie = `userEmail=${user.email}; path=/; max-age=3600`;
-            document.cookie = `userName=${user.name}; path=/; max-age=3600`;
+            // 🔥 일반 로그인도 카카오처럼 localStorage 사용
+            localStorage.setItem("accessToken", "local-login");
+            localStorage.setItem("loginUser", JSON.stringify(user));
 
             alert(`로그인 성공! ${user.name}님 환영합니다.`);
             navigate("/todo");
@@ -42,6 +43,7 @@ export default function LoginPage() {
             alert("서버 오류로 로그인 실패");
         }
     };
+
 
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
