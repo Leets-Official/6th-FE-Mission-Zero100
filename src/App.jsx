@@ -4,6 +4,7 @@ import Root from './pages/Root';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
 import TodoPage from './pages/TodoPage';
+import KakaoRedirect from './pages/KakaoRedirect';
 
 import './App.css';
 
@@ -14,6 +15,7 @@ function App(){
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/todo" element={<TodoPage />} />
+            <Route path="/oauth/kakao/success" element={<KakaoRedirect/>} />
         </Routes>
     );
 }

@@ -5,7 +5,32 @@
       "username": "gildong@gmail.com",
       "password": "12345",
       "name": "홍길동"
+    },
+    {
+      "id": "0ca3",
+      "username": "jjbatman",
+      "password": "12345",
+      "name": "홍길동"
     }
   ],
-  "todos": []
+  "todos": [
+    {
+      "id": "f1ea",
+      "text": "웅이비명 영상 보기",
+      "completed": false,
+      "userId": "08ce"
+    },
+    {
+      "id": "ce3b",
+      "text": "안경닦기",
+      "completed": false,
+      "userId": "08ce"
+    },
+    {
+      "id": "08fc",
+      "text": "집에가고싶다고 생각하기",
+      "completed": false,
+      "userId": "08ce"
+    }
+  ]
 }
