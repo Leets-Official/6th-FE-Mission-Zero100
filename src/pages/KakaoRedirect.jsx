@@ -1,101 +1,152 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios'; 
+import axios from 'axios';
 
 const KakaoRedirect = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const code = searchParams.get('code');
+  const [status, setStatus] = useState('loading'); // loading, success, error, signup_needed
 
   const BASE_URL = 'https://blog.leets.land';
 
-  const { data, isLoading, isError, error } = useQuery({
-    queryKey: ['kakaoLogin', code],
-    queryFn: async () => {
-      // 정확한 로그 확인을 위해 axios 직접 호출
-      console.log("백엔드로 코드 전송 시도:", code);
-      const response = await axios.get(`${BASE_URL}/auth/kakao/redirect`, {
-        params: { code: code }
-      });
-      console.log("백엔드 전체 응답:", response);
-      return response.data;
-    },
-    enabled: !!code, // 코드가 있을 때만 실행
-    retry: false,
-    staleTime: 0,
-  });
-
   useEffect(() => {
-    if (data) {
-      console.log("받은 데이터 구조:", data);
+    const handleKakaoLogin = async () => {
+      if (!code) {
+        console.error('인증 코드가 없습니다.');
+        setStatus('error');
+        return;
+      }
 
-      // Case 1: data.data.accessToken 구조일 때 
-      if (data.data && data.data.accessToken) {
-        localStorage.setItem('accessToken', data.data.accessToken);
-        localStorage.setItem('refreshToken', data.data.refreshToken);
-        alert("로그인 성공!");
-        navigate('/todo');
-      }
-      // Case 2: data.accessToken 구조일 때 
-      else if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        alert("로그인 성공!");
-        navigate('/todo');
-      }
-      // Case 3: 회원가입 필요 (401 에러가 200으로 포장되어 올 경우)
-      else if (data.code === 401 || data.httpStatus === "UNAUTHORIZED") {
-        alert("회원가입이 필요합니다.");
-        navigate('/signup', { state: { kakaoData: data } });
-      }
-    }
-  }, [data, navigate]);
+      try {
+        console.log("백엔드로 코드 전송:", code);
+        
+        const response = await axios.get(`${BASE_URL}/auth/kakao/redirect`, {
+          params: { code: code }
+        });
 
-  // 에러 발생 시 처리
-  useEffect(() => {
-    if (isError) {
-      console.error("에러 발생:", error);
-      if (error.response && error.response.status === 401) {
-        alert("회원가입이 필요합니다. (401 Error)");
-        navigate('/signup');
-      }
-    }
-  }, [isError, error, navigate]);
+        console.log("백엔드 응답:", response);
 
-  if (isLoading) {
+        // 응답 데이터 구조 확인
+        const responseData = response.data;
+        
+        // 토큰이 있는 경우 (로그인 성공)
+        let accessToken = null;
+        let refreshToken = null;
+
+        // 다양한 응답 구조 처리
+        if (responseData.data?.accessToken) {
+          accessToken = responseData.data.accessToken;
+          refreshToken = responseData.data.refreshToken;
+        } else if (responseData.accessToken) {
+          accessToken = responseData.accessToken;
+          refreshToken = responseData.refreshToken;
+        }
+
+        if (accessToken) {
+          // 토큰 저장
+          localStorage.setItem('accessToken', accessToken);
+          localStorage.setItem('refreshToken', refreshToken);
+
+          // axios 기본 헤더 설정
+          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+          console.log("로그인 성공 - 토큰 저장 완료");
+          setStatus('success');
+
+          // 짧은 지연 후 페이지 이동
+          setTimeout(() => {
+            window.location.href = '/todo';
+          }, 500);
+        } else {
+          // 토큰이 없으면 회원가입 필요
+          console.log("회원가입이 필요합니다.");
+          setStatus('signup_needed');
+          setTimeout(() => {
+            navigate('/signup', { state: { kakaoData: responseData } });
+          }, 1500);
+        }
+
+      } catch (error) {
+        console.error("카카오 로그인 처리 중 에러:", error);
+        
+        // 401 에러는 회원가입 필요
+        if (error.response?.status === 401) {
+          console.log("401 에러 - 회원가입 필요");
+          setStatus('signup_needed');
+          setTimeout(() => {
+            navigate('/signup', { 
+              state: { 
+                kakaoData: error.response?.data,
+                needsSignup: true 
+              } 
+            });
+          }, 1500);
+        } else {
+          setStatus('error');
+          console.error("에러 상세:", error.response?.data || error.message);
+        }
+      }
+    };
+
+    handleKakaoLogin();
+  }, [code, navigate]);
+
+  // 로딩 상태별 UI
+  if (status === 'loading') {
     return (
-      <div style={{ padding: '50px', textAlign: 'center' }}>
-        <h2>로그인 처리 중입니다...</h2>
-        <p>코드를 백엔드로 보내고 있습니다.</p>
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-md">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold mb-2">카카오 로그인 처리 중...</h2>
+          <p className="text-gray-600">잠시만 기다려주세요</p>
+        </div>
       </div>
     );
   }
 
-  
-  return (
-    <div style={{ padding: '20px', wordBreak: 'break-all' }}>
-      <h1>현재 상태 디버깅</h1>
-      
-      {isError ? (
-        <div style={{ color: 'red' }}>
-          <h3>에러 발생!</h3>
-          <p>{error.message}</p>
-          <pre>{JSON.stringify(error.response?.data, null, 2)}</pre>
+  if (status === 'success') {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-md">
+          <div className="text-green-500 text-5xl mb-4">✓</div>
+          <h2 className="text-xl font-semibold mb-2">로그인 성공!</h2>
+          <p className="text-gray-600">Todo 페이지로 이동합니다...</p>
         </div>
-      ) : (
-        <div style={{ color: 'blue' }}>
-          <h3>서버에서 받은 데이터:</h3>
-          {/* 받은 데이터를 화면에 그대로 출력 */}
-          <pre>{JSON.stringify(data, null, 2)}</pre> 
-        </div>
-      )}
+      </div>
+    );
+  }
 
-      <button onClick={() => navigate('/')} style={{ marginTop: '20px', padding: '10px' }}>
-        홈으로 돌아가기
-      </button>
-    </div>
-  );
+  if (status === 'signup_needed') {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-md">
+          <h2 className="text-xl font-semibold mb-2">회원가입이 필요합니다</h2>
+          <p className="text-gray-600">회원가입 페이지로 이동합니다...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center p-8 bg-white rounded-lg shadow-md">
+          <div className="text-red-500 text-5xl mb-4">✕</div>
+          <h2 className="text-xl font-semibold mb-2">로그인 처리 중 오류가 발생했습니다</h2>
+          <p className="text-gray-600 mb-4">다시 시도해주세요</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="px-6 py-2 bg-yellow-400 text-black font-semibold rounded-md hover:bg-yellow-500 transition"
+          >
+            로그인 페이지로 돌아가기
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default KakaoRedirect;

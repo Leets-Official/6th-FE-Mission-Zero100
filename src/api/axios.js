@@ -1,11 +1,11 @@
 import axios from 'axios';
 
 export const api = axios.create({
-  baseURL: 'http://localhost:3000', 
+  baseURL: 'https://blog.leets.land',
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true, // CORS 이슈 해결을 위해 필요할 수 있음
+  withCredentials: false, // CORS 이슈 해결을 위해 필요할 수 있음
 });
 
 api.interceptors.request.use(
