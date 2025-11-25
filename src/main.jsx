@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import axios from 'axios'
 
 import './index.css'
-import router from './router.jsx';
+import router from './routes';
 
 
 const queryClient = new QueryClient()
