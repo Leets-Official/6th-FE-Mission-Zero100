@@ -4,6 +4,8 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    port: 3000,},
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'), //  '@'를 src 폴더로 지정
