@@ -11,11 +11,13 @@ export default function SignupPage() {
     const location = useLocation();
 
     const [name, setName] = useState("");
-    const [email, setEmail] = useState(""); // 사용자 입력 id
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
+    // 카카오 RedirectPage에서 전달된 인가 코드
     const oauthCode = useMemo(() => location.state?.code, [location.state]);
 
+    // 회원가입 실행
     const handleSignup = async () => {
         if (!name || !email || !password) {
             alert("모든 항목을 입력하세요.");
@@ -23,30 +25,26 @@ export default function SignupPage() {
         }
 
         try {
-            // 🔥 OAuth 회원가입 모드
+            // OAuth 회원가입
             if (oauthCode) {
                 const kakaoPicture = localStorage.getItem("kakaoPicture");
                 const kakaoId = localStorage.getItem("kakaoId");
 
-                const nickname = `kakao_${kakaoId}`; // ★ 수정!!
-
                 await registerOauth({
-                    email, // 반드시 이메일 형식
-                    nickname: `kakao${kakaoId}`,   // ✔ 언더바 제거
+                    email,
+                    nickname: `kakao${kakaoId}`, // 백엔드 규칙 준수
                     profilePicture: kakaoPicture,
                     name,
                     kakaoId,
-                    birthDate: "2000-01-01", // ✔ 필수
-
+                    birthDate: "2000-01-01",
                 });
 
-                alert("카카오 연동 회원가입 완료!");
+                alert("카카오 연동 회원가입 완료");
                 navigate("/todo", { replace: true });
                 return;
             }
 
-
-            // 🔥 일반 회원가입
+            // 일반 회원가입
             const exists = await fetchUserByEmail(email);
             if (exists.length > 0) {
                 alert("이미 존재하는 아이디입니다.");
@@ -55,8 +53,9 @@ export default function SignupPage() {
 
             await signupUser({ name, email, password });
 
-            alert("회원가입 성공!");
+            alert("회원가입 성공");
             navigate("/login");
+
         } catch (err) {
             console.error("회원가입 오류:", err.response?.data || err);
             alert(err.response?.data?.message || "회원가입 중 오류 발생");
@@ -73,8 +72,7 @@ export default function SignupPage() {
               {oauthCode && (
                 <p className="text-sm text-gray-600 mb-4 text-center">
                     카카오 인증이 완료되었습니다.
-                    <br />
-                    서비스에서 사용할 아이디/비밀번호를 입력해 주세요.
+                    서비스에서 사용할 정보를 입력하세요.
                 </p>
               )}
 
@@ -120,7 +118,7 @@ export default function SignupPage() {
               <div className="flex justify-end mb-6">
                   <Button
                     variant="primary"
-                    className="w-full flex item-center justify-center leading-none bg-gray-700 text-white border-none hover:bg-gray-800 transition"
+                    className="w-full bg-gray-700 text-white hover:bg-gray-800 transition"
                     onClick={handleSignup}
                   >
                       회원가입

@@ -6,13 +6,14 @@ import Text from "@/components/Text";
 export default function KakaoRedirectPage() {
   const navigate = useNavigate();
   const location = useLocation();
-  const handledRef = useRef(false);
+  const handledRef = useRef(false); // StrictMode 중복 실행 방지
   const [message, setMessage] = useState("카카오 로그인 처리 중...");
 
   useEffect(() => {
     if (handledRef.current) return;
     handledRef.current = true;
 
+    // 카카오 인가 코드 추출
     const code = new URLSearchParams(location.search).get("code");
 
     if (!code) {
@@ -22,6 +23,7 @@ export default function KakaoRedirectPage() {
 
     const process = async () => {
       try {
+        // 백엔드에 인가 코드 전달
         const res = await axios.get(
           `https://blog.leets.land/auth/kakao/redirect`,
           {
@@ -33,7 +35,7 @@ export default function KakaoRedirectPage() {
         const result = res.data;
         console.log("백엔드 응답:", result);
 
-        // 🔥 회원가입 필요 (401일 때)
+        // 회원가입 필요
         if (result.code === 401) {
           const { nickname, picture, kakaoId } = result.data;
 
@@ -41,18 +43,27 @@ export default function KakaoRedirectPage() {
           localStorage.setItem("kakaoPicture", picture);
           localStorage.setItem("kakaoId", kakaoId);
 
+          // 회원가입 페이지로 이동
           navigate("/signup", { state: { code } });
           return;
         }
 
-        // 🔥 정상 로그인
+        // 정상 로그인
         if (result.code === 200) {
           const { name, email } = result.data;
 
+          // OAuth 로그인 정보 저장
           localStorage.setItem("userName", name);
           localStorage.setItem("userEmail", email);
 
-          alert(`${name}님 환영합니다!`);
+          // 이미 저장된 사용자 정보 조회
+          const loginUser = JSON.parse(localStorage.getItem("loginUser"));
+
+          // 이름 혹은 닉네임 선택
+          const nickname = loginUser?.nickname || loginUser?.name || "사용자";
+
+          alert(`${nickname}님 환영합니다!`);
+
           navigate("/todo");
         }
       } catch (err) {

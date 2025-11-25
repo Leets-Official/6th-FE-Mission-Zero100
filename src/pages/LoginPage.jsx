@@ -10,6 +10,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
+    // 로컬 json-server 로그인 처리
     const handleLogin = async () => {
         if (!email || !password) {
             alert("아이디와 비밀번호를 입력하세요.");
@@ -31,7 +32,7 @@ export default function LoginPage() {
                 return;
             }
 
-            // 🔥 일반 로그인도 카카오처럼 localStorage 사용
+            // 로그인 정보 저장
             localStorage.setItem("accessToken", "local-login");
             localStorage.setItem("loginUser", JSON.stringify(user));
 
@@ -43,7 +44,6 @@ export default function LoginPage() {
             alert("서버 오류로 로그인 실패");
         }
     };
-
 
     return (
       <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
