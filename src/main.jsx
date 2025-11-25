@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
+import React, { useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 
@@ -11,6 +12,17 @@ import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
 
 function Home() {
+  // redirect to /todo if already logged in
+  const navigate = useNavigate()
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('loginUser')
+      if (raw) navigate('/todo')
+    } catch (e) {
+      // ignore
+    }
+  }, [navigate])
+
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       <div className="flex flex-col gap-3 w-full max-w-[300px] mx-auto">
