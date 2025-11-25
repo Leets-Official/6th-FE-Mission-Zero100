@@ -1,23 +1,23 @@
-import {Routes, Route} from 'react-router-dom';
+// import {Routes, Route} from 'react-router-dom';
 
-import Root from './pages/Root';
-import LoginPage from './pages/LoginPage';
-import SignupPage from './pages/SignupPage';
-import TodoPage from './pages/TodoPage';
-import KakaoRedirect from './pages/KakaoRedirect';
+// import Root from './pages/Root';
+// import LoginPage from './pages/LoginPage';
+// import SignupPage from './pages/SignupPage';
+// import TodoPage from './pages/TodoPage';
+// import KakaoRedirect from './pages/KakaoRedirect';
 
-import './App.css';
+// import './App.css';
 
-function App(){
-    return(
-        <Routes>
-            <Route path="/" element={<Root />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignupPage />} />
-            <Route path="/todo" element={<TodoPage />} />
-            <Route path="/oauth/kakao/success" element={<KakaoRedirect/>} />
-        </Routes>
-    );
-}
+// function App(){
+//     return(
+//         <Routes>
+//             <Route path="/" element={<Root />} />
+//             <Route path="/login" element={<LoginPage />} />
+//             <Route path="/signup" element={<SignupPage />} />
+//             <Route path="/todo" element={<TodoPage />} />
+//             <Route path="/oauth/kakao/success" element={<KakaoRedirect/>} />
+//         </Routes>
+//     );
+// }
 
-export default App;
+// export default App;
