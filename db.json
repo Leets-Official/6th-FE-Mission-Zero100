@@ -1,10 +1,11 @@
 {
+  "tasks": [
+    { "id": 1, "title": "샘플 투두 1", "completed": false },
+    { "id": 2, "title": "샘플 투두 2", "completed": true }
+  ],
   "users": [
-    {
-      "id": "035d",
-      "name": "수성",
-      "username": "1",
-      "password": "1"
-    }
+    { "id": 1, "name": "테스트유저", "username": "test", "password": "test", "provider": "local" },
+    { "id": 2, "name": "KakaoUser", "username": "kakao_user", "provider": "kakao", "providerId": 12345 },
+    { "id": 3, "name": "수성", "username": "1", "password": "1", "provider": "local" }
   ]
 }

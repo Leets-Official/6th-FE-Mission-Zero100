@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import React, { useEffect } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, useNavigate } from 'react-router-dom'
 import './index.css'
@@ -10,13 +11,16 @@ import App from './App.jsx'
 import TodoApp from './page.jsx'
 import Login from './pages/Login.jsx'
 import Signup from './pages/Signup.jsx'
+import KakaoCallback from './pages/KakaoCallback.jsx'
+import PrivateRoute from './components/PrivateRoute.jsx'
 
 function Home() {
   // redirect to /todo if already logged in
   const navigate = useNavigate()
   useEffect(() => {
     try {
-      const raw = localStorage.getItem('loginUser')
+      // if either legacy key or oauth key present, consider logged in
+      const raw = localStorage.getItem('loginUser') || localStorage.getItem('user')
       if (raw) navigate('/todo')
     } catch (e) {
       // ignore
@@ -43,15 +47,20 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Home /> },   // /
       { path: 'about', element: <About /> }, // /about
-  { path: 'todo', element: <TodoApp /> }, // /todo (use existing Todo app)
+  { path: 'todo', element: <PrivateRoute><TodoApp /></PrivateRoute> }, // /todo (protected)
       { path: 'login', element: <Login /> }, // /login
       { path: 'signup', element: <Signup /> }, // /signup
+  { path: 'auth/kakao/callback', element: <KakaoCallback /> },
     ],
   },
 ])
 
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </StrictMode>
 )
