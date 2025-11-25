@@ -6,7 +6,10 @@ export default function RootPage() {
   const navigate = useNavigate();
 
   const kakaoLogin = () => {
-    window.location.href = "http://localhost:3001/auth/kakao";
+    window.location.href = "https://blog.leets.land/auth/kakao";
+
+
+
   };
 
   return (
