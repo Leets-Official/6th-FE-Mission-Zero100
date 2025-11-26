@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
+import { api } from '../api/axios';
 
 const KakaoRedirect = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const code = searchParams.get('code');
-  const [status, setStatus] = useState('loading'); // loading, success, error, signup_needed
-
-  const BASE_URL = 'https://blog.leets.land';
+  const [status, setStatus] = useState('loading'); 
 
   useEffect(() => {
     const handleKakaoLogin = async () => {
@@ -21,17 +18,17 @@ const KakaoRedirect = () => {
 
       try {
         console.log("백엔드로 코드 전송:", code);
-        
-        const response = await axios.get(`${BASE_URL}/auth/kakao/redirect`, {
-          params: { code: code }
+      
+        const response = await api.get(`/auth/kakao/redirect`, {
+          params: { code: code },
+          _skipErrorHandler: true 
         });
 
         console.log("백엔드 응답:", response);
 
-        // 응답 데이터 구조 확인
         const responseData = response.data;
         
-        // 토큰이 있는 경우 (로그인 성공)
+        // 토큰이 있는 경우 -> 로그인 성공
         let accessToken = null;
         let refreshToken = null;
 
@@ -49,18 +46,14 @@ const KakaoRedirect = () => {
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
 
-          // axios 기본 헤더 설정
-          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-
           console.log("로그인 성공 - 토큰 저장 완료");
           setStatus('success');
 
-          // 짧은 지연 후 페이지 이동
           setTimeout(() => {
             window.location.href = '/todo';
           }, 500);
         } else {
-          // 토큰이 없으면 회원가입 필요
+          // 토큰이 없으면 회원가입 필요 -> 정상적인 성공 응답이지만 토큰이 없는 경우
           console.log("회원가입이 필요합니다.");
           setStatus('signup_needed');
           setTimeout(() => {
@@ -70,8 +63,7 @@ const KakaoRedirect = () => {
 
       } catch (error) {
         console.error("카카오 로그인 처리 중 에러:", error);
-        
-        // 401 에러는 회원가입 필요
+      
         if (error.response?.status === 401) {
           console.log("401 에러 - 회원가입 필요");
           setStatus('signup_needed');
@@ -91,9 +83,9 @@ const KakaoRedirect = () => {
     };
 
     handleKakaoLogin();
-  }, [code, navigate]);
+  }, [code, navigate]); 
 
-  // 로딩 상태별 UI
+  
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
