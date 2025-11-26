@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import Button from "../components/button";
 import Input from "../components/Input";
 import { loginUser } from "../api/auth";
-import axios from "axios";
+import KakaoIcon from '../assets/kakao.svg?react';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -97,9 +97,7 @@ function LoginPage(){
                         className="w-full py-2 px-4 bg-[#FEE500] text-black font-bold rounded-md hover:bg-[#FDD835] transition duration-200 flex justify-center items-center"
                     >
                     
-                        <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                           <path d="M12 3C6.48 3 2 6.48 2 10.77C2 13.54 3.85 16 6.64 17.47L5.64 21.12C5.55 21.46 5.95 21.75 6.25 21.55L10.72 18.57C11.14 18.61 11.57 18.63 12 18.63C17.52 18.63 22 15.15 22 10.86C22 6.57 17.52 3 12 3Z"/>
-                        </svg>
+                        <KakaoIcon className="w-5 h-5 mr-2" />
                         Login with Kakao 
                     </button>
                 </div>
