@@ -50,7 +50,7 @@ const KakaoRedirect = () => {
           setStatus('success');
 
           setTimeout(() => {
-            window.location.href = '/todo';
+           navigate('/todo', { replace: true});
           }, 500);
         } else {
           // 토큰이 없으면 회원가입 필요 -> 정상적인 성공 응답이지만 토큰이 없는 경우
