@@ -5,6 +5,8 @@ import Input from "../components/Input";
 import { loginUser } from "../api/auth";
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+
 function LoginPage(){
     const [id, setId] = useState('');
     const [pwd, setPwd] = useState('');
@@ -12,7 +14,7 @@ function LoginPage(){
     const navigate = useNavigate();
 
     const handleKakaoLogin = () => {
-    window.location.href = 'https://blog.leets.land/auth/kakao';
+    window.location.href = `${BASE_URL}/auth/kakao`
 };
     const handleLogin = async (e) => { //인풋이벤트 발생 시 페이지가 reload되는 걸 막기 위해 사용
         e.preventDefault();
