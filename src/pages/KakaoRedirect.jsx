@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/axios';
 
-//JWT토큰을 해석해주는 함수
+// JWT토큰을 해석해주는 함수
 const parseJwt = (token) => {
   try {
     const base64Url = token.split('.')[1];
@@ -21,8 +21,7 @@ const KakaoRedirect = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const code = searchParams.get('code');
-  const [status, setStatus] = useState('loading');
-
+  const [status, setStatus] = useState('loading'); 
   useEffect(() => {
     const handleKakaoLogin = async () => {
       if (!code) {
@@ -55,7 +54,6 @@ const KakaoRedirect = () => {
         }
 
         if (accessToken) {
-
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
 
@@ -65,18 +63,13 @@ const KakaoRedirect = () => {
             console.log("User ID 추출 및 저장 완료:", decodedToken.sub);
           }
 
-          console.log("로그인 성공 - 토큰 저장 완료");
-          setStatus('success');
+          console.log("로그인 성공 - 즉시 이동");
 
-          setTimeout(() => {
-            navigate('/todo', { replace: true });
-          }, 500);
+          navigate('/todo', { replace: true });
+
         } else {
           console.log("회원가입이 필요합니다.");
-          setStatus('signup_needed');
-          setTimeout(() => {
-            navigate('/signup', { state: { kakaoData: responseData } });
-          }, 1500);
+          navigate('/signup', { state: { kakaoData: responseData } });
         }
 
       } catch (error) {
@@ -84,15 +77,12 @@ const KakaoRedirect = () => {
 
         if (error.response?.status === 401) {
           console.log("401 에러 - 회원가입 필요");
-          setStatus('signup_needed');
-          setTimeout(() => {
-            navigate('/signup', {
-              state: {
-                kakaoData: error.response?.data,
-                needsSignup: true
-              }
-            });
-          }, 1500);
+          navigate('/signup', {
+            state: {
+              kakaoData: error.response?.data,
+              needsSignup: true
+            }
+          });
         } else {
           setStatus('error');
           console.error("에러 상세:", error.response?.data || error.message);
@@ -102,49 +92,22 @@ const KakaoRedirect = () => {
 
     handleKakaoLogin();
   }, [code, navigate]);
-
-
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center p-8 bg-white rounded-lg shadow-md">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold mb-2">카카오 로그인 처리 중...</h2>
-          <p className="text-gray-600">잠시만 기다려주세요</p>
+          <h2 className="text-xl font-semibold mb-2">로그인 중입니다...</h2>
         </div>
       </div>
     );
   }
-
-  if (status === 'success') {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-lg shadow-md">
-          <div className="text-green-500 text-5xl mb-4">✓</div>
-          <h2 className="text-xl font-semibold mb-2">로그인 성공!</h2>
-          <p className="text-gray-600">Todo 페이지로 이동합니다...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (status === 'signup_needed') {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2">회원가입이 필요합니다</h2>
-          <p className="text-gray-600">회원가입 페이지로 이동합니다...</p>
-        </div>
-      </div>
-    );
-  }
-
   if (status === 'error') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center p-8 bg-white rounded-lg shadow-md">
           <div className="text-red-500 text-5xl mb-4">✕</div>
-          <h2 className="text-xl font-semibold mb-2">로그인 처리 중 오류가 발생했습니다</h2>
+          <h2 className="text-xl font-semibold mb-2">로그인 오류</h2>
           <p className="text-gray-600 mb-4">다시 시도해주세요</p>
           <button
             onClick={() => navigate('/login')}
