@@ -1,14 +1,21 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
-// accessToken이 localStorage에 있는지 확인하여
-// 로그인이 필요한 페이지를 보호하는 컴포넌트
 const ProtectedRoute = () => {
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('accessToken'); // 카카오 로그인
+  const loggedInUser = localStorage.getItem('loggedInUser'); // 일반 로그인
+  const userId = localStorage.getItem('userId'); // 사용자 ID
 
-  // 토큰이 있으면 자식 컴포넌트(Outlet)를 렌더링하고,
-  // 없으면 로그인 페이지로 리디렉션합니다.
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  const isAuthenticated = token || loggedInUser || userId;
+
+  console.log('ProtectedRoute 인증 체크:', {
+    hasToken: !!token,
+    hasLoggedInUser: !!loggedInUser,
+    hasUserId: !!userId,
+    isAuthenticated: !!isAuthenticated
+  });
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

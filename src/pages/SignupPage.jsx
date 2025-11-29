@@ -1,8 +1,7 @@
-import {useState} from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../components/button";
 import Input from "../components/Input";
-import { checkUserExists, createUser } from "../api/auth";
 
 function SignupPage(){
     const [name, setName] = useState('');
@@ -11,22 +10,33 @@ function SignupPage(){
     
     const navigate = useNavigate();
 
-    const handleSignupPage = async (e) =>{
+    const handleSignupPage = (e) =>{ 
         e.preventDefault();
 
-        console.log('회원가입시도');
+        console.log('회원가입 시도');
 
-        try{
-            const checkRes = await checkUserExists(id);
+        try {
+            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
 
-            if (checkRes.data.length > 0){
+            const existingUser = storedUsers.find(user => user.username === id);
+            if (existingUser) {
                 alert("이미 사용 중인 아이디입니다.");
                 return;
             }
-            await createUser({username: id, password:pwd, name: name});
+
+            const newUser = {
+                id: Date.now(), 
+                username: id,
+                password: pwd,
+                name: name
+            };
+
+            storedUsers.push(newUser);
+            localStorage.setItem('users', JSON.stringify(storedUsers));
 
             alert("회원가입에 성공했습니다! 로그인 페이지로 이동합니다.");
             navigate('/login');
+
         } catch(error){
             console.error('회원가입 중 오류 발생:', error);
             alert("회원가입 중 오류가 발생했습니다");
@@ -34,7 +44,7 @@ function SignupPage(){
     };
 
     const navToLogin = ()=>{
-        navigate('/Login');
+        navigate('/login');
     };
 
     return(
@@ -50,7 +60,7 @@ function SignupPage(){
                         </label>
                         <Input
                             id="name"
-                            name="named"
+                            name="name"
                             placeholder="이름을 입력하세요"
                             value={name}
                             onChange={(e)=>setName(e.target.value)}/>
@@ -67,7 +77,7 @@ function SignupPage(){
                             onChange={(e)=>setId(e.target.value)}/>
                     </div>
                     <div>
-                        <label htmlFor="pwd" className="block mb-1text-sm font-medium text-gray-700">
+                        <label htmlFor="pwd" className="block mb-1 text-sm font-medium text-gray-700">
                             비밀번호
                         </label>
                         <Input 
@@ -84,6 +94,15 @@ function SignupPage(){
                         </Button>
                     </div>
                 </form>
+                {/* 로그인 페이지로 돌아가는 버튼 추가 */}
+                 <div className="text-center mt-4">
+                    <button
+                        type="button"
+                        onClick={navToLogin}
+                        className="text-sm text-gray-600 hover:underline">
+                            이미 계정이 있으신가요? 로그인
+                    </button>
+                </div>
             </div>
         </div>
     );

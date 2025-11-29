@@ -43,11 +43,9 @@ const KakaoRedirect = () => {
 
         const responseData = response.data;
 
-        // 토큰이 있는 경우 -> 로그인 성공
         let accessToken = null;
         let refreshToken = null;
 
-        // 다양한 응답 구조 처리
         if (responseData.data?.accessToken) {
           accessToken = responseData.data.accessToken;
           refreshToken = responseData.data.refreshToken;
@@ -60,7 +58,6 @@ const KakaoRedirect = () => {
 
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
-
 
           const decodedToken = parseJwt(accessToken);
           if (decodedToken && decodedToken.sub) {
@@ -75,7 +72,6 @@ const KakaoRedirect = () => {
             navigate('/todo', { replace: true });
           }, 500);
         } else {
-          // 토큰이 없으면 회원가입 필요 -> 정상적인 성공 응답이지만 토큰이 없는 경우
           console.log("회원가입이 필요합니다.");
           setStatus('signup_needed');
           setTimeout(() => {
