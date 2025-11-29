@@ -13,9 +13,10 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
-    const handleKakaoLogin = () => {
-        window.location.href = `${BASE_URL}/auth/kakao`;
-    };
+   const handleKakaoLogin = () => {
+    const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+    window.location.href = `${BASE_URL}/auth/kakao?redirect_uri=${redirectUri}`;
+};
 
     const handleLogin = (e) => { 
         e.preventDefault();
