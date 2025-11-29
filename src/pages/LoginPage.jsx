@@ -1,46 +1,63 @@
 import { useState } from "react";
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from "../components/button";
 import Input from "../components/Input";
-import { loginUser } from "../api/auth";
-import axios from "axios";
+import KakaoIcon from '../assets/kakao.svg?react';
+
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 function LoginPage(){
     const [id, setId] = useState('');
     const [pwd, setPwd] = useState('');
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
     const handleKakaoLogin = () => {
-    window.location.href = 'https://blog.leets.land/auth/kakao';
-};
-    const handleLogin = async (e) => { //인풋이벤트 발생 시 페이지가 reload되는 걸 막기 위해 사용
+        window.location.href = `${BASE_URL}/auth/kakao`;
+    };
+
+    const handleLogin = (e) => { 
         e.preventDefault();
+        setError('');
+        console.log('로그인 시도');
 
-        try{
-            const response = await loginUser({username: id, password:pwd});
-            if(response.data.length === 1){
-                const user = response.data[0];
-
-                const userToStore = {
-                    id: user.id,
-                    username: user.username,
-                    name: user.name
-                };
-                localStorage.setItem('loggedInUser', JSON.stringify(userToStore));
-
-                alert(`${user.name}님, 환영합니다`);
-                navigate('/todo');
-            } else {
-                alert("아이디 또는 비밀번호가 일치하지 않습니다");
-            }
-        } catch(error){
-            console.error("로그인 중 오류 발생 : ", error);
-            alert("로그인 중 오류가 발생했습니다.");
+        if (!id || !pwd) {
+            setError('아이디와 비밀번호를 입력해주세요');
+            return;
         }
 
+        try {
+            const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+            console.log('저장된 유저 목록:', storedUsers);
 
-        console.log('로그인시도');
+            const targetUser = storedUsers.find(
+                user => user.username === id && user.password === pwd
+            );
+
+            if (targetUser) {
+                console.log('로그인 성공! 유저 정보:', targetUser);
+                
+                localStorage.setItem('loggedInUser', JSON.stringify(targetUser));
+                localStorage.setItem('userId', String(targetUser.id));
+                
+                console.log('LocalStorage 저장 완료:', {
+                    loggedInUser: localStorage.getItem('loggedInUser'),
+                    userId: localStorage.getItem('userId')
+                });
+                
+                alert(`${targetUser.name}님, 환영합니다!`);
+                
+                console.log('Todo 페이지로 이동 중...');
+                navigate('/todo', { replace: true });
+            } else {
+                console.log('로그인 실패: 일치하는 유저 없음');
+                setError('아이디 또는 비밀번호가 일치하지 않습니다');
+            }
+        } catch(error){
+            console.error("로그인 중 오류 발생:", error);
+            setError('로그인 중 오류가 발생했습니다');
+        }
     };
 
     const navToSignUp = ()=>{
@@ -53,6 +70,14 @@ function LoginPage(){
                 <h2 className="text-2xl font-bold text-center">
                     로그인
                 </h2>
+                
+                {/* 에러 메시지 표시 */}
+                {error && (
+                    <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        {error}
+                    </div>
+                )}
+                
                 <form className="space-y-4" onSubmit={handleLogin}>
                     <div>
                         <label htmlFor="id" className="block mb-1 text-sm font-medium text-gray-700">
@@ -63,7 +88,8 @@ function LoginPage(){
                             name="id"
                             placeholder="아이디를 입력하세요"
                             value={id}
-                            onChange={(e)=>setId(e.target.value)}/>
+                            onChange={(e)=>setId(e.target.value)}
+                            required/>
                     </div>
                     <div>
                         <label htmlFor="pwd" className="block mb-1 text-sm font-medium text-gray-700">
@@ -72,10 +98,11 @@ function LoginPage(){
                         <Input
                             id="pwd"
                             name="pwd"
-                            type="password" //비밀번호가림
+                            type="password" 
                             placeholder="비밀번호를 입력하세요"
                             value={pwd}
-                            onChange={(e)=>setPwd(e.target.value)}/>
+                            onChange={(e)=>setPwd(e.target.value)}
+                            required/>
                     </div>
                     <div>
                         <Button type="submit">
@@ -94,11 +121,8 @@ function LoginPage(){
                         onClick={handleKakaoLogin}
                         className="w-full py-2 px-4 bg-[#FEE500] text-black font-bold rounded-md hover:bg-[#FDD835] transition duration-200 flex justify-center items-center"
                     >
-                    
-                        <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                           <path d="M12 3C6.48 3 2 6.48 2 10.77C2 13.54 3.85 16 6.64 17.47L5.64 21.12C5.55 21.46 5.95 21.75 6.25 21.55L10.72 18.57C11.14 18.61 11.57 18.63 12 18.63C17.52 18.63 22 15.15 22 10.86C22 6.57 17.52 3 12 3Z"/>
-                        </svg>
-                        카카오로 3초 만에 시작하기
+                        <KakaoIcon className="w-5 h-5 mr-2" />
+                        Login with Kakao 
                     </button>
                 </div>
                 <div className="text-center">
@@ -111,7 +135,6 @@ function LoginPage(){
             </div>
         </div>
     );
-
 }
 
 export default LoginPage;

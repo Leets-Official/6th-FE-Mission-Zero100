@@ -13,32 +13,46 @@ function TodoPage() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-   
     const checkAuth = () => {
       const token = localStorage.getItem('accessToken');
-      
-      if (!token) {
-        console.log('토큰이 없습니다. 로그인 페이지로 이동합니다.');
+      const storedUserId = localStorage.getItem('userId');
+      const loggedInUser = localStorage.getItem('loggedInUser');
+
+      if (!token && !storedUserId && !loggedInUser) {
+        console.log('로그인 정보가 없습니다. 로그인 페이지로 이동합니다.');
         alert('로그인이 필요합니다.');
         navigate('/login');
         return;
       }
 
-      console.log('토큰 확인 완료');
-      
-  
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      if (loggedInUser) {
-        const user = JSON.parse(loggedInUser);
-        setUserId(user.id);
-        console.log('일반 로그인 사용자 ID:', user.id);
+      console.log('인증 정보 확인 완료');
+
+      if (storedUserId) {
+        setUserId(storedUserId);
+        console.log('로그인 사용자 ID (API/저장된 값):', storedUserId);
+      } else if (loggedInUser) {
+        try {
+          const user = JSON.parse(loggedInUser);
+          setUserId(user.id); 
+          console.log('일반 로그인 사용자 ID:', user.id);
+        } catch (e) {
+          console.error('사용자 정보 파싱 실패', e);
+          localStorage.removeItem('accessToken');
+          localStorage.removeItem('refreshToken');
+          localStorage.removeItem('loggedInUser');
+          localStorage.removeItem('userId');
+          navigate('/login');
+          return;
+        }
       } else {
-        // 카카오 로그인의 경우 - 토큰을 userId로 사용
-        const token = localStorage.getItem('accessToken');
-        // 토큰의 일부를 userId로 사용
-        const kakaoUserId = 'kakao_' + btoa(token).substring(0, 10);
-        setUserId(kakaoUserId);
-        console.log('카카오 로그인 사용자 ID:', kakaoUserId);
+        console.error('유효한 사용자 ID를 찾을 수 없습니다.');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('loggedInUser');
+        localStorage.removeItem('userId');
+        alert('사용자 정보를 불러올 수 없어 다시 로그인이 필요합니다.');
+        navigate('/login');
+        return;
       }
       
       setIsAuthenticated(true);
@@ -48,7 +62,6 @@ function TodoPage() {
     checkAuth();
   }, [navigate]);
 
-  // localStorage에서 할일 목록 불러오기
   useEffect(() => {
     if (!isAuthenticated || !userId) return;
 
@@ -74,7 +87,6 @@ function TodoPage() {
     loadTodos();
   }, [isAuthenticated, userId]);
 
-  // localStorage에 할일 목록 저장
   const saveTodos = (updatedTasks) => {
     try {
       localStorage.setItem(`todos_${userId}`, JSON.stringify(updatedTasks));
@@ -84,7 +96,6 @@ function TodoPage() {
     }
   };
 
-  // Todo 추가
   const handleAddTask = (text) => {
     if (!userId) {
       alert('사용자 정보를 불러오는 중입니다.');
@@ -104,7 +115,6 @@ function TodoPage() {
     saveTodos(updatedTasks);
   };
 
-  // Todo 토글 (완료/미완료)
   const handleToggleTask = (id) => {
     console.log('할일 상태 변경:', id);
     const updatedTasks = tasks.map((task) =>
@@ -114,7 +124,6 @@ function TodoPage() {
     saveTodos(updatedTasks);
   };
 
-  // Todo 삭제
   const handleDeleteTask = (id) => {
     console.log('할일 삭제:', id);
     const updatedTasks = tasks.filter((task) => task.id !== id);
@@ -122,7 +131,6 @@ function TodoPage() {
     saveTodos(updatedTasks);
   };
 
-  // Todo 수정
   const handleEditTask = (id, newText) => {
     console.log('할일 수정:', id, newText);
     const updatedTasks = tasks.map((task) =>
@@ -132,7 +140,6 @@ function TodoPage() {
     saveTodos(updatedTasks);
   };
 
-  // 카테고리별 필터링
   const filteredTasks = tasks.filter((task) => {
     if (category === 'active') return !task.completed;
     if (category === 'completed') return task.completed;
@@ -161,9 +168,16 @@ function TodoPage() {
           <h1 className="text-4xl font-bold">TodoMatic</h1>
           <button
             onClick={() => {
-              localStorage.clear();
+              console.log('로그아웃 전 users 확인:', localStorage.getItem('users'));
+              
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              localStorage.removeItem('loggedInUser');
+              localStorage.removeItem('userId');
+              
+              console.log('로그아웃 후 users 확인:', localStorage.getItem('users'));
               alert('로그아웃 되었습니다.');
-              navigate('/login');
+              navigate('/login', { replace: true });
             }}
             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition"
           >

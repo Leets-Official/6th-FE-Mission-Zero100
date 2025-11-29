@@ -1,15 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { api } from '../api/axios';
+
+// JWT토큰을 해석해주는 함수
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('토큰 파싱 실패:', e);
+    return null;
+  }
+};
 
 const KakaoRedirect = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const code = searchParams.get('code');
-  const [status, setStatus] = useState('loading'); // loading, success, error, signup_needed
-
-  const BASE_URL = 'https://blog.leets.land';
-
+  const [status, setStatus] = useState('loading'); 
   useEffect(() => {
     const handleKakaoLogin = async () => {
       if (!code) {
@@ -20,21 +32,19 @@ const KakaoRedirect = () => {
 
       try {
         console.log("백엔드로 코드 전송:", code);
-        
-        const response = await axios.get(`${BASE_URL}/auth/kakao/redirect`, {
-          params: { code: code }
+
+        const response = await api.get(`/auth/kakao/redirect`, {
+          params: { code: code },
+          _skipErrorHandler: true
         });
 
         console.log("백엔드 응답:", response);
 
-        // 응답 데이터 구조 확인
         const responseData = response.data;
-        
-        // 토큰이 있는 경우 (로그인 성공)
+
         let accessToken = null;
         let refreshToken = null;
 
-        // 다양한 응답 구조 처리
         if (responseData.data?.accessToken) {
           accessToken = responseData.data.accessToken;
           refreshToken = responseData.data.refreshToken;
@@ -44,44 +54,35 @@ const KakaoRedirect = () => {
         }
 
         if (accessToken) {
-          // 토큰 저장
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
 
-          // axios 기본 헤더 설정
-          axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+          const decodedToken = parseJwt(accessToken);
+          if (decodedToken && decodedToken.sub) {
+            localStorage.setItem('userId', decodedToken.sub);
+            console.log("User ID 추출 및 저장 완료:", decodedToken.sub);
+          }
 
-          console.log("로그인 성공 - 토큰 저장 완료");
-          setStatus('success');
+          console.log("로그인 성공 - 즉시 이동");
 
-          // 짧은 지연 후 페이지 이동
-          setTimeout(() => {
-            window.location.href = '/todo';
-          }, 500);
+          navigate('/todo', { replace: true });
+
         } else {
-          // 토큰이 없으면 회원가입 필요
           console.log("회원가입이 필요합니다.");
-          setStatus('signup_needed');
-          setTimeout(() => {
-            navigate('/signup', { state: { kakaoData: responseData } });
-          }, 1500);
+          navigate('/signup', { state: { kakaoData: responseData } });
         }
 
       } catch (error) {
         console.error("카카오 로그인 처리 중 에러:", error);
-        
-        // 401 에러는 회원가입 필요
+
         if (error.response?.status === 401) {
           console.log("401 에러 - 회원가입 필요");
-          setStatus('signup_needed');
-          setTimeout(() => {
-            navigate('/signup', { 
-              state: { 
-                kakaoData: error.response?.data,
-                needsSignup: true 
-              } 
-            });
-          }, 1500);
+          navigate('/signup', {
+            state: {
+              kakaoData: error.response?.data,
+              needsSignup: true
+            }
+          });
         } else {
           setStatus('error');
           console.error("에러 상세:", error.response?.data || error.message);
@@ -91,49 +92,22 @@ const KakaoRedirect = () => {
 
     handleKakaoLogin();
   }, [code, navigate]);
-
-  // 로딩 상태별 UI
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center p-8 bg-white rounded-lg shadow-md">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-400 mx-auto mb-4"></div>
-          <h2 className="text-xl font-semibold mb-2">카카오 로그인 처리 중...</h2>
-          <p className="text-gray-600">잠시만 기다려주세요</p>
+          <h2 className="text-xl font-semibold mb-2">로그인 중입니다...</h2>
         </div>
       </div>
     );
   }
-
-  if (status === 'success') {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-lg shadow-md">
-          <div className="text-green-500 text-5xl mb-4">✓</div>
-          <h2 className="text-xl font-semibold mb-2">로그인 성공!</h2>
-          <p className="text-gray-600">Todo 페이지로 이동합니다...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (status === 'signup_needed') {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
-        <div className="text-center p-8 bg-white rounded-lg shadow-md">
-          <h2 className="text-xl font-semibold mb-2">회원가입이 필요합니다</h2>
-          <p className="text-gray-600">회원가입 페이지로 이동합니다...</p>
-        </div>
-      </div>
-    );
-  }
-
   if (status === 'error') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center p-8 bg-white rounded-lg shadow-md">
           <div className="text-red-500 text-5xl mb-4">✕</div>
-          <h2 className="text-xl font-semibold mb-2">로그인 처리 중 오류가 발생했습니다</h2>
+          <h2 className="text-xl font-semibold mb-2">로그인 오류</h2>
           <p className="text-gray-600 mb-4">다시 시도해주세요</p>
           <button
             onClick={() => navigate('/login')}
