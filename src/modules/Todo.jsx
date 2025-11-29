@@ -1,6 +1,6 @@
 import {useState, useEffect} from 'react';
 import Checkbox from '../components/checkBox';
-import Button from '../components/button';
+import Button from '../components/Button';
 
 function Todo({ task, onToggle, onDelete, onEdit }) {
   const [isEditing, setIsEditing] = useState(false);
