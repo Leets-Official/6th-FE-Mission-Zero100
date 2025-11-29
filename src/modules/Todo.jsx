@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react';
-import Checkbox from '../components/checkBox';
+import Checkbox from '../components/CheckBox';
 import Button from '../components/Button';
 
 function Todo({ task, onToggle, onDelete, onEdit }) {
