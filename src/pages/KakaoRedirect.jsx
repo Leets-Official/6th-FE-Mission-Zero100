@@ -2,11 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { api } from '../api/axios';
 
+//JWT토큰을 해석해주는 함수
+const parseJwt = (token) => {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+    return JSON.parse(jsonPayload);
+  } catch (e) {
+    console.error('토큰 파싱 실패:', e);
+    return null;
+  }
+};
+
 const KakaoRedirect = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const code = searchParams.get('code');
-  const [status, setStatus] = useState('loading'); 
+  const [status, setStatus] = useState('loading');
 
   useEffect(() => {
     const handleKakaoLogin = async () => {
@@ -18,16 +33,16 @@ const KakaoRedirect = () => {
 
       try {
         console.log("백엔드로 코드 전송:", code);
-      
+
         const response = await api.get(`/auth/kakao/redirect`, {
           params: { code: code },
-          _skipErrorHandler: true 
+          _skipErrorHandler: true
         });
 
         console.log("백엔드 응답:", response);
 
         const responseData = response.data;
-        
+
         // 토큰이 있는 경우 -> 로그인 성공
         let accessToken = null;
         let refreshToken = null;
@@ -42,15 +57,22 @@ const KakaoRedirect = () => {
         }
 
         if (accessToken) {
-          // 토큰 저장
+
           localStorage.setItem('accessToken', accessToken);
           localStorage.setItem('refreshToken', refreshToken);
+
+
+          const decodedToken = parseJwt(accessToken);
+          if (decodedToken && decodedToken.sub) {
+            localStorage.setItem('userId', decodedToken.sub);
+            console.log("User ID 추출 및 저장 완료:", decodedToken.sub);
+          }
 
           console.log("로그인 성공 - 토큰 저장 완료");
           setStatus('success');
 
           setTimeout(() => {
-           navigate('/todo', { replace: true});
+            navigate('/todo', { replace: true });
           }, 500);
         } else {
           // 토큰이 없으면 회원가입 필요 -> 정상적인 성공 응답이지만 토큰이 없는 경우
@@ -63,16 +85,16 @@ const KakaoRedirect = () => {
 
       } catch (error) {
         console.error("카카오 로그인 처리 중 에러:", error);
-      
+
         if (error.response?.status === 401) {
           console.log("401 에러 - 회원가입 필요");
           setStatus('signup_needed');
           setTimeout(() => {
-            navigate('/signup', { 
-              state: { 
+            navigate('/signup', {
+              state: {
                 kakaoData: error.response?.data,
-                needsSignup: true 
-              } 
+                needsSignup: true
+              }
             });
           }, 1500);
         } else {
@@ -83,9 +105,9 @@ const KakaoRedirect = () => {
     };
 
     handleKakaoLogin();
-  }, [code, navigate]); 
+  }, [code, navigate]);
 
-  
+
   if (status === 'loading') {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">

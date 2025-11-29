@@ -13,7 +13,6 @@ function TodoPage() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-   
     const checkAuth = () => {
       const token = localStorage.getItem('accessToken');
       
@@ -26,19 +25,28 @@ function TodoPage() {
 
       console.log('토큰 확인 완료');
       
-  
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      if (loggedInUser) {
-        const user = JSON.parse(loggedInUser);
-        setUserId(user.id);
-        console.log('일반 로그인 사용자 ID:', user.id);
+      // 저장된 ID를 불러오는 로직으로 바꿨음
+      const storedUserId = localStorage.getItem('userId'); // KakaoRedirect에서 저장한 ID
+      const loggedInUser = localStorage.getItem('loggedInUser'); // 일반 로그인 데이터 
+
+      if (storedUserId) {
+        setUserId(storedUserId);
+        console.log('로그인 사용자 ID (API 기반):', storedUserId);
+      } else if (loggedInUser) {
+        try {
+          const user = JSON.parse(loggedInUser);
+          setUserId(user.id);
+          console.log('일반 로그인 사용자 ID:', user.id);
+        } catch (e) {
+          console.error('사용자 정보 파싱 실패', e);
+        }
       } else {
-        // 카카오 로그인의 경우 - 토큰을 userId로 사용
-        const token = localStorage.getItem('accessToken');
-        // 토큰의 일부를 userId로 사용
-        const kakaoUserId = 'kakao_' + btoa(token).substring(0, 10);
-        setUserId(kakaoUserId);
-        console.log('카카오 로그인 사용자 ID:', kakaoUserId);
+        //토큰은 있는데 ID 정보가 아예 없는 경우
+        console.error('유효한 사용자 ID를 찾을 수 없습니다.');
+        localStorage.clear(); // 꼬인 데이터 초기화
+        alert('사용자 정보를 불러올 수 없어 다시 로그인이 필요합니다.');
+        navigate('/login');
+        return;
       }
       
       setIsAuthenticated(true);
@@ -104,7 +112,7 @@ function TodoPage() {
     saveTodos(updatedTasks);
   };
 
-  // Todo 토글 (완료/미완료)
+  // Todo 토글
   const handleToggleTask = (id) => {
     console.log('할일 상태 변경:', id);
     const updatedTasks = tasks.map((task) =>
