@@ -13,10 +13,19 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
-   const handleKakaoLogin = () => {
+  // src/pages/LoginPage.jsx
+
+const handleKakaoLogin = () => {
     const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
-    window.location.href = `https://blog.leets.land/auth/kakao?redirect_uri=https://baeyunsun-week10.d1orgn14ma8otc.amplifyapp.com/oauth/kakao/success`;
-    };
+
+    console.log("Redirect URI:", redirectUri);
+
+    if (!redirectUri) {
+        alert("리다이렉트 URI 설정이 되어있지 않습니다.");
+        return;
+    }
+    window.location.href = `https://blog.leets.land/auth/kakao?redirect_uri=${redirectUri}`;
+};
 
     const handleLogin = (e) => { 
         e.preventDefault();
