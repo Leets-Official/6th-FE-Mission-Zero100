@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import Button from "../components/button";
+import Button from "../components/Button";
 import Input from "../components/Input";
 import KakaoIcon from '../assets/kakao.svg?react';
 
@@ -13,9 +13,24 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
-    const handleKakaoLogin = () => {
-        window.location.href = `${BASE_URL}/auth/kakao`;
-    };
+const handleKakaoLogin = () => {
+    const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+
+    console.log("Kakao REST API Key:", KAKAO_REST_API_KEY);
+    console.log("Redirect URI:", REDIRECT_URI);
+
+    if (!KAKAO_REST_API_KEY || !REDIRECT_URI) {
+        alert("카카오 로그인 설정이 완료되지 않았습니다.");
+        return;
+    }
+
+    // 카카오 인증 서버로 직접 리다이렉트
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+    
+    console.log("카카오 로그인 URL:", kakaoAuthUrl);
+    window.location.href = kakaoAuthUrl;
+};
 
     const handleLogin = (e) => { 
         e.preventDefault();
