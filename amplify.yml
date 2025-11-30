@@ -6,9 +6,7 @@ frontend:
         - npm install
     build:
       commands:
-        - echo "VITE_API_URL=$VITE_API_URL" >> .env
-        - echo "VITE_KAKAO_REDIRECT_URI=$VITE_KAKAO_REDIRECT_URI" >> .env
-        - npm run build
+        - VITE_API_URL=$VITE_API_URL VITE_KAKAO_REDIRECT_URI=$VITE_KAKAO_REDIRECT_URI npm run build
   artifacts:
     baseDirectory: dist
     files:
