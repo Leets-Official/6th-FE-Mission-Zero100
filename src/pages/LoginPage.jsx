@@ -13,8 +13,6 @@ function LoginPage(){
 
     const navigate = useNavigate();
 
-  // src/pages/LoginPage.jsx
-
 const handleKakaoLogin = () => {
     const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
