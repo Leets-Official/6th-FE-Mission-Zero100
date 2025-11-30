@@ -14,15 +14,22 @@ function LoginPage(){
     const navigate = useNavigate();
 
 const handleKakaoLogin = () => {
-    const redirectUri = import.meta.env.VITE_KAKAO_REDIRECT_URI;
+    const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
+    const REDIRECT_URI = import.meta.env.VITE_KAKAO_REDIRECT_URI;
 
-    console.log("Redirect URI:", redirectUri);
+    console.log("Kakao REST API Key:", KAKAO_REST_API_KEY);
+    console.log("Redirect URI:", REDIRECT_URI);
 
-    if (!redirectUri) {
-        alert("리다이렉트 URI 설정이 되어있지 않습니다.");
+    if (!KAKAO_REST_API_KEY || !REDIRECT_URI) {
+        alert("카카오 로그인 설정이 완료되지 않았습니다.");
         return;
     }
-    window.location.href = `https://blog.leets.land/auth/kakao?redirect_uri=${redirectUri}`;
+
+    // 카카오 인증 서버로 직접 리다이렉트
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_REST_API_KEY}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=code`;
+    
+    console.log("카카오 로그인 URL:", kakaoAuthUrl);
+    window.location.href = kakaoAuthUrl;
 };
 
     const handleLogin = (e) => { 
