@@ -7,6 +7,7 @@ export default function Button({ children, variant = 'default', className = '', 
     primary: 'bg-black text-white border-black hover:bg-gray-800', // Add 버튼
     outline: 'border-gray-400 text-gray-700 bg-white hover:bg-gray-100', // Edit, Category
     danger: 'bg-red-600 text-white border-red-600 hover:bg-red-700', // Delete 버튼
+    kakao: 'bg-[#FEE500] text-black border-[#FEE500] hover:bg-[#FADA00]', // Kakao login
   };
 
   return (

@@ -2,13 +2,21 @@ import { useNavigate, Link } from 'react-router-dom';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import Text from '../components/common/Text';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { login } from '../lib/auth';
 
 export default function Login() {
   const navigate = useNavigate();
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    const user = localStorage.getItem('loginUser');
+    if (token || user) {
+      navigate('/todo', { replace: true });
+    }
+  }, [navigate]);
 
   const handleLogin = async () => {
     if (!id || !pw) {
@@ -61,7 +69,7 @@ export default function Login() {
           </div>
         </div>
 
-        <div className='flex justify-end mb-6'>
+        <div className='flex flex-col gap-3 mb-6'>
           <Button
             variant='primary'
             className='w-full flex item-center justify-center leading-none bg-gray-700 text-white border-none hover:bg-gray-800 transition'
