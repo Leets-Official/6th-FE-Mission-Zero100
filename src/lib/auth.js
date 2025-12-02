@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const LOGIN_USER_KEY = 'loginUser';
-const LOCAL_USER_URL = 'http://localhost:3001/users';
+const LOCAL_USER_URL = import.meta.env.VITE_LOCAL_USER_URL;
 
 const saveAccessToken = (token) => {
   if (token) localStorage.setItem(ACCESS_TOKEN_KEY, token);

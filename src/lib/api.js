@@ -1,7 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://blog.leets.land';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const ACCESS_TOKEN_KEY = 'accessToken';
+
+if (!API_BASE_URL) {
+  // 빌드/실행 시점에 base URL이 비어있지 않은지 확인
+  throw new Error('VITE_API_BASE_URL가 설정되지 않았습니다.');
+}
 
 // 공용 axios 인스턴스
 export const api = axios.create({
