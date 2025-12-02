@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { kakaoLogin } from "@/api/auth";
 import axios from "axios";
 import Text from "@/components/Text";
 
@@ -24,25 +25,16 @@ export default function KakaoRedirectPage() {
     const process = async () => {
       try {
         // 백엔드에 인가 코드 전달
-        const res = await axios.get(
-          `https://blog.leets.land/auth/kakao/redirect`,
-          {
-            params: { code },
-            withCredentials: true,
-          }
-        );
+        const result = await kakaoLogin(code);
 
-        const result = res.data;
         console.log("백엔드 응답:", result);
 
         // 회원가입 필요
         if (result.code === 401) {
           const { nickname, picture, kakaoId } = result.data;
 
-          localStorage.setItem("kakaoNickname", nickname);
-          localStorage.setItem("kakaoPicture", picture);
-          localStorage.setItem("kakaoId", kakaoId);
-
+          const kakaoUser = { nickname, picture, kakaoId };
+          localStorage.setItem("kakaoUser", JSON.stringify(kakaoUser));
           // 회원가입 페이지로 이동
           navigate("/signup", { state: { code } });
           return;
