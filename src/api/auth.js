@@ -1,5 +1,6 @@
 // api.js에서 만든 axios 인스턴스 불러오기
-import { api } from "./api";
+import { api } from "@/lib/api";
+
 
 // 로컬 json-server 주소
 const LOCAL_USER_URL = "http://localhost:3000/users";
@@ -60,4 +61,3 @@ export const kakaoLogin = async (code) => {
   });
   return data;
 };
-g
