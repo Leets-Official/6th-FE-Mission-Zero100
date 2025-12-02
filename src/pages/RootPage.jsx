@@ -6,8 +6,10 @@ export default function RootPage() {
   const navigate = useNavigate();
 
   // 카카오 OAuth 로그인 시작
+  const KAKAO_AUTH_URL = `${import.meta.env.VITE_API_BASE_URL}/auth/kakao`;
+
   const kakaoLogin = () => {
-    window.location.href = "https://blog.leets.land/auth/kakao";
+    window.location.href = KAKAO_AUTH_URL;
   };
 
   return (
