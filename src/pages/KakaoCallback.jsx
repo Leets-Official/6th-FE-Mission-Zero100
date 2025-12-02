@@ -55,18 +55,18 @@ export default function KakaoCallback() {
         <Text as='p' className='text-gray-700'>
           {message}
         </Text>
-        {errorDetail ? (
-          <p className='mt-3 text-sm text-red-600 break-words'>{errorDetail}</p>
-        ) : null}
-        {errorDetail ? (
-          <button
-            type='button'
-            className='mt-4 w-full bg-gray-700 text-white py-2 rounded hover:bg-gray-800'
-            onClick={() => navigate('/login', { replace: true })}
-          >
-            로그인 화면으로 돌아가기
-          </button>
-        ) : null}
+        {errorDetail && (
+          <>
+            <p className='mt-3 text-sm text-red-600 break-words'>{errorDetail}</p>
+            <button
+              type='button'
+              className='mt-4 w-full bg-gray-700 text-white py-2 rounded hover:bg-gray-800'
+              onClick={() => navigate('/login', { replace: true })}
+            >
+              로그인 화면으로 돌아가기
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
