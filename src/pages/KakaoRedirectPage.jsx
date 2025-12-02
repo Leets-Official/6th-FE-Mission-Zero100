@@ -39,10 +39,8 @@ export default function KakaoRedirectPage() {
         if (result.code === 401) {
           const { nickname, picture, kakaoId } = result.data;
 
-          localStorage.setItem("kakaoNickname", nickname);
-          localStorage.setItem("kakaoPicture", picture);
-          localStorage.setItem("kakaoId", kakaoId);
-
+          const kakaoUser = { nickname, picture, kakaoId };
+          localStorage.setItem("kakaoUser", JSON.stringify(kakaoUser));
           // 회원가입 페이지로 이동
           navigate("/signup", { state: { code } });
           return;
