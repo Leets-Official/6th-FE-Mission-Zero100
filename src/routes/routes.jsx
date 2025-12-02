@@ -3,22 +3,29 @@ import RootPage from "@/pages/RootPage";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
 import TodoPage from "@/pages/TodoPage.jsx";
+import KakaoRedirectPage from "@/pages/KakaoRedirectPage";
 
 export const router = createBrowserRouter([
     {
         path: "/",
-        element: <RootPage />, // 루트 페이지 (로그인/회원가입 버튼)
+        element: <RootPage />,
     },
     {
         path: "/todo",
-        element: <TodoPage />, // Todo 페이지
+        element: <TodoPage />,
     },
     {
         path: "/login",
-        element: <LoginPage />, // 로그인 페이지
+        element: <LoginPage />,
     },
     {
         path: "/signup",
-        element: <SignupPage />, // 회원가입 페이지
+        element: <SignupPage />,
+    },
+
+    // ★★ 카카오가 실제로 보내는 URL과 일치해야 함 ★★
+    {
+        path: "/oauth/kakao/success",
+        element: <KakaoRedirectPage />,
     },
 ]);

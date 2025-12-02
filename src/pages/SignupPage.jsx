@@ -1,104 +1,137 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Text from "@/components/Text";
+import { registerOauth } from "@/api/auth";
+import { fetchUserByEmail, signupUser } from "@/api/auth";
 
 export default function SignupPage() {
-    // 입력값 상태 관리
+    const navigate = useNavigate();
+    const location = useLocation();
+
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
 
-    // 회원가입 처리
+    // 카카오 RedirectPage에서 전달된 인가 코드
+    const oauthCode = useMemo(() => location.state?.code, [location.state]);
+
+    // 회원가입 실행
     const handleSignup = async () => {
-        // 입력값 누락 시 경고
         if (!name || !email || !password) {
             alert("모든 항목을 입력하세요.");
             return;
         }
 
         try {
-            //   이메일 중복 여부 확인
-            const check = await axios.get("http://localhost:3001/users", {
-                params: { email },
-            });
+            // OAuth 회원가입
+            if (oauthCode) {
+                const kakaoPicture = localStorage.getItem("kakaoPicture");
+                const kakaoId = localStorage.getItem("kakaoId");
 
-            if (check.data.length > 0) {
-                alert("회원가입 실패.\n이미 존재하는 아이디(이메일)입니다.");
+                await registerOauth({
+                    email,
+                    nickname: `kakao${kakaoId}`, // 백엔드 규칙 준수
+                    profilePicture: kakaoPicture,
+                    name,
+                    kakaoId,
+                    birthDate: "2000-01-01",
+                });
+
+                alert("카카오 연동 회원가입 완료");
+                navigate("/todo", { replace: true });
                 return;
             }
 
-            //  새로운 사용자 등록
-            await axios.post("http://localhost:3001/users", {
-                name,
-                email,
-                password,
-            });
+            // 일반 회원가입
+            const exists = await fetchUserByEmail(email);
+            if (exists.length > 0) {
+                alert("이미 존재하는 아이디입니다.");
+                return;
+            }
 
-            alert(" 회원가입 성공! 로그인 페이지로 이동합니다.");
-            navigate("/login"); // 로그인 페이지로 이동
-        } catch (error) {
-            console.error(error);
-            alert("회원가입 중 오류가 발생했습니다.");
+            await signupUser({ name, email, password });
+
+            alert("회원가입 성공");
+            navigate("/login");
+
+        } catch (err) {
+            console.error("회원가입 오류:", err.response?.data || err);
+            alert(err.response?.data?.message || "회원가입 중 오류 발생");
         }
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen bg-gray-50">
-            <div className="w-[360px] p-6 bg-gray-200 border border-gray-200 rounded-md shadow-sm">
-                <Text as="h2" className="text-2xl font-bold mb-6 text-center">
-                    회원가입
-                </Text>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
+          <div className="bg-white p-10 rounded-lg shadow-md w-[420px]">
+              <Text as="h2" className="text-2xl font-bold mb-8 text-center">
+                  {oauthCode ? "카카오 연동 회원가입" : "회원가입"}
+              </Text>
 
-                {/* 입력 폼 영역 */}
-                <div className="space-y-4">
-                    {/* 이름 */}
-                    <div className="flex items-center space-x-2">
-                        <label className="w-20 text-sm font-bold text-gray-800">이름</label>
-                        <Input
-                            className="flex-1 border border-gray-400 rounded-xl px-2 py-2 text-sm"
-                            placeholder="이름 입력"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                        />
-                    </div>
+              {oauthCode && (
+                <p className="text-sm text-gray-600 mb-4 text-center">
+                    카카오 인증이 완료되었습니다.
+                    서비스에서 사용할 정보를 입력하세요.
+                </p>
+              )}
 
-                    {/* 이메일 */}
-                    <div className="flex items-center space-x-2">
-                        <label className="w-20 text-sm font-bold text-gray-800">아이디</label>
-                        <Input
-                            className="flex-1 border border-gray-400 rounded-xl px-2 py-2 text-sm"
-                            placeholder="아이디 입력 (이메일 형식)"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+              <div className="flex flex-col gap-4 mb-6">
+                  <div className="flex items-center justify-between gap-3">
+                      <label className="w-20 text-right font-medium text-gray-700">
+                          이름
+                      </label>
+                      <Input
+                        placeholder="이름 입력"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="flex-1 border-gray-400"
+                      />
+                  </div>
 
-                    {/* 비밀번호 */}
-                    <div className="flex items-center space-x-2">
-                        <label className="w-20 text-sm font-bold text-gray-800">비밀번호</label>
-                        <Input
-                            className="flex-1 border border-gray-400 rounded-xl px-2 py-2 text-sm"
-                            type="password"
-                            placeholder="비밀번호 입력"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
-                </div>
+                  <div className="flex items-center justify-between gap-3">
+                      <label className="w-20 text-right font-medium text-gray-700">
+                          아이디
+                      </label>
+                      <Input
+                        placeholder="이메일 입력"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="flex-1 border-gray-400"
+                      />
+                  </div>
 
-                {/* 회원가입 버튼 */}
-                <Button
+                  <div className="flex items-center justify-between gap-3">
+                      <label className="w-20 text-right font-medium text-gray-700">
+                          비밀번호
+                      </label>
+                      <Input
+                        type="password"
+                        placeholder="비밀번호 입력"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="flex-1 border-gray-400"
+                      />
+                  </div>
+              </div>
+
+              <div className="flex justify-end mb-6">
+                  <Button
                     variant="primary"
-                    className="w-40 py-2 text-sm font-medium mt-6 block mx-auto rounded-md"
+                    className="w-full bg-gray-700 text-white hover:bg-gray-800 transition"
                     onClick={handleSignup}
-                >
-                    회원가입
-                </Button>
-            </div>
-        </div>
+                  >
+                      회원가입
+                  </Button>
+              </div>
+
+              <p className="text-center text-gray-600 text-sm">
+                  이미 계정이 있으신가요?{" "}
+                  <Link to="/login" className="text-blue-600 underline">
+                      로그인
+                  </Link>
+              </p>
+          </div>
+      </div>
     );
 }
